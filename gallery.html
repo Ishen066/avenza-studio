@@ -1,124 +1,505 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Gallery | Avenza Studio</title>
 
+    <link rel="stylesheet" href="css/style.css">
 
-<link rel="stylesheet" href="css/style.css">
-
-
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
-
 
 <body>
 
-<nav class="navbar">
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <img src="images/logo.png" alt="Avenza Studio Logo">
+            <span>AVENZA STUDIO</span>
+        </div>
+
+        <div class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <ul class="nav-links">
+
+            <li><a href="index.html">Home</a></li>
+
+            <li><a href="about.html">About</a></li>
+
+            <li><a href="services.html">Services</a></li>
+
+            <li><a href="gallery.html" class="active">Gallery</a></li>
+
+            <li><a href="pricing.html">Pricing</a></li>
+
+            <li><a href="contact.html">Contact</a></li>
+
+        </ul>
+
+    </nav>
 
 
-<div class="logo">AVENZA STUDIO</div>
+    <!-- =========================
+         GALLERY HERO
+    ========================== -->
 
-<ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="services.html">Services</a></li>
-    <li><a href="gallery.html" class="active">Gallery</a></li>
-    <li><a href="pricing.html">Pricing</a></li>
-    <li><a href="contact.html">Contact</a></li>
-</ul>
+    <section class="gallery-hero">
 
+        <div class="gallery-hero-overlay"></div>
 
-</nav>
+        <div class="gallery-hero-content">
 
-<section class="page-header">
+            <span class="section-label">
+                Our Portfolio
+            </span>
 
+            <h1>
+                Moments We Have Captured
+            </h1>
 
-<h1>Our Gallery</h1>
+            <p>
+                Discover a selection of our wedding photography,
+                portraits, events and custom framing projects.
+            </p>
 
-<p>
-    Explore some of our recent photography work.
-</p>
+        </div>
 
-
-</section>
-
-<section class="gallery-page">
-
-
-<div class="gallery-photo">
-    <img src="images/gallery1.jpg" alt="Wedding">
-</div>
-
-<div class="gallery-photo">
-    <img src="images/gallery2.jpg" alt="Portrait">
-</div>
-
-<div class="gallery-photo">
-    <img src="images/gallery3.jpg" alt="Graduation">
-</div>
-
-<div class="gallery-photo">
-    <img src="images/gallery4.jpg" alt="Event">
-</div>
-
-<div class="gallery-photo">
-    <img src="images/gallery5.jpg" alt="Framing">
-</div>
-
-<div class="gallery-photo">
-    <img src="images/gallery6.jpg" alt="Photography">
-</div>
+    </section>
 
 
-</section>
+    <!-- =========================
+         GALLERY INTRO
+    ========================== -->
 
-<footer>
+    <section class="gallery-intro">
 
+        <span class="section-label">
+            Featured Work
+        </span>
 
-<h3>Avenza Studio</h3>
+        <h2>
+            Explore Our Photography
+        </h2>
 
-<p>
-    Capturing Moments, Framing Memories
-</p>
+        <p>
+            Every image tells a story. Browse through some of the
+            beautiful moments captured and created by Avenza Studio.
+        </p>
 
-<div class="social-links">
-
-    <a href="https://facebook.com" target="_blank">
-        <i class="fab fa-facebook"></i>
-    </a>
-
-    <a href="https://instagram.com" target="_blank">
-        <i class="fab fa-instagram"></i>
-    </a>
-
-    <a href="https://youtube.com" target="_blank">
-        <i class="fab fa-youtube"></i>
-    </a>
-
-    <a href="https://wa.me/94767041074" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-</div>
-
-<p>
-    Email: info@avenzastudio.com
-</p>
-
-<p>
-    Phone: +94 76 704 1074
-</p>
-
-<p>
-    © 2026 Avenza Studio. All Rights Reserved.
-</p>
+    </section>
 
 
-</footer>
+    <!-- =========================
+         FILTER BUTTONS
+    ========================== -->
 
-<script src="js/script.js"></script>
+    <section class="gallery-filter">
+
+        <button class="filter-btn active" data-filter="all">
+            All
+        </button>
+
+        <button class="filter-btn" data-filter="wedding">
+            Wedding
+        </button>
+
+        <button class="filter-btn" data-filter="portrait">
+            Portrait
+        </button>
+
+        <button class="filter-btn" data-filter="event">
+            Events
+        </button>
+
+        <button class="filter-btn" data-filter="framing">
+            Framing
+        </button>
+
+    </section>
+
+
+    <!-- =========================
+         GALLERY GRID
+    ========================== -->
+
+    <section class="gallery-page">
+
+        <!-- Wedding -->
+
+        <div class="gallery-photo" data-category="wedding">
+
+            <img src="images/gallery1.jpg"
+                 alt="Wedding Photography">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Wedding</span>
+
+                    <h3>
+                        Timeless Wedding Moments
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- Portrait -->
+
+        <div class="gallery-photo" data-category="portrait">
+
+            <img src="images/gallery2.jpg"
+                 alt="Portrait Photography">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Portrait</span>
+
+                    <h3>
+                        Elegant Portrait Session
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- Event -->
+
+        <div class="gallery-photo" data-category="event">
+
+            <img src="images/gallery3.jpg"
+                 alt="Event Photography">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Event</span>
+
+                    <h3>
+                        Celebration Highlights
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- Framing -->
+
+        <div class="gallery-photo" data-category="framing">
+
+            <img src="images/gallery4.jpg"
+                 alt="Custom Framing">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Framing</span>
+
+                    <h3>
+                        Premium Custom Frames
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- Wedding -->
+
+        <div class="gallery-photo" data-category="wedding">
+
+            <img src="images/gallery5.jpg"
+                 alt="Wedding Memories">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Wedding</span>
+
+                    <h3>
+                        Beautiful Wedding Stories
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- Portrait -->
+
+        <div class="gallery-photo" data-category="portrait">
+
+            <img src="images/gallery6.jpg"
+                 alt="Studio Portrait">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Portrait</span>
+
+                    <h3>
+                        Creative Studio Portrait
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- Event -->
+
+        <div class="gallery-photo" data-category="event">
+
+            <img src="images/gallery7.jpg"
+                 alt="Event Coverage">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Event</span>
+
+                    <h3>
+                        Special Event Coverage
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- Framing -->
+
+        <div class="gallery-photo" data-category="framing">
+
+            <img src="images/gallery8.jpg"
+                 alt="Photo Framing">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Framing</span>
+
+                    <h3>
+                        Framing Your Memories
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- Wedding -->
+
+        <div class="gallery-photo" data-category="wedding">
+
+            <img src="images/gallery9.jpg"
+                 alt="Wedding Couple">
+
+            <div class="gallery-overlay">
+
+                <div>
+                    <span>Wedding</span>
+
+                    <h3>
+                        Romantic Wedding Portrait
+                    </h3>
+                </div>
+
+                <i class="fas fa-magnifying-glass-plus"></i>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+
+    <section class="stats-section">
+
+        <div class="stat-box">
+
+            <i class="fas fa-camera"></i>
+
+            <h2>1200+</h2>
+
+            <p>Photos Captured</p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <i class="fas fa-face-smile"></i>
+
+            <h2>500+</h2>
+
+            <p>Happy Clients</p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <i class="fas fa-calendar-check"></i>
+
+            <h2>150+</h2>
+
+            <p>Events Covered</p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <i class="fas fa-award"></i>
+
+            <h2>5+</h2>
+
+            <p>Years Experience</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="cta gallery-cta">
+
+        <span class="section-label">
+            Avenza Studio
+        </span>
+
+        <h2>
+            Turn Your Moments Into Lasting Memories
+        </h2>
+
+        <p>
+            Contact Avenza Studio to learn more about our photography,
+            printing and custom framing services.
+        </p>
+
+        <div class="gallery-cta-buttons">
+
+            <a href="services.html" class="btn">
+                Explore Services
+            </a>
+
+            <a href="contact.html" class="btn btn-outline">
+                Contact Us
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <h3>Avenza Studio</h3>
+
+        <p>
+            Capturing Moments, Framing Memories
+        </p>
+
+        <div class="social-links">
+
+            <a href="https://facebook.com"
+               target="_blank"
+               aria-label="Facebook">
+
+                <i class="fab fa-facebook"></i>
+
+            </a>
+
+            <a href="https://instagram.com"
+               target="_blank"
+               aria-label="Instagram">
+
+                <i class="fab fa-instagram"></i>
+
+            </a>
+
+            <a href="https://youtube.com"
+               target="_blank"
+               aria-label="YouTube">
+
+                <i class="fab fa-youtube"></i>
+
+            </a>
+
+            <a href="https://wa.me/94772687814"
+               target="_blank"
+               aria-label="WhatsApp">
+
+                <i class="fab fa-whatsapp"></i>
+
+            </a>
+
+        </div>
+
+        <p>
+            Email: info@avenzastudio.com
+        </p>
+
+        <p>
+            Phone: +94 77 268 7814
+        </p>
+
+        <p>
+            © 2026 Avenza Studio. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+ <script src="js/script.js"></script>   
 
 </body>
+
 </html>
