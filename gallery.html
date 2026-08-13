@@ -129,225 +129,16 @@
 
 
     <!-- =========================
-         GALLERY GRID
+         DYNAMIC GALLERY GRID
     ========================== -->
 
-    <section class="gallery-page">
+    <section class="gallery-page" id="galleryGrid">
 
-        <!-- Wedding -->
+        <p class="gallery-loading">
+            Loading gallery...
+        </p>
 
-        <div class="gallery-photo" data-category="wedding">
-
-            <img src="images/gallery1.jpg"
-                 alt="Wedding Photography">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Wedding</span>
-
-                    <h3>
-                        Timeless Wedding Moments
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- Portrait -->
-
-        <div class="gallery-photo" data-category="portrait">
-
-            <img src="images/gallery2.jpg"
-                 alt="Portrait Photography">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Portrait</span>
-
-                    <h3>
-                        Elegant Portrait Session
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- Event -->
-
-        <div class="gallery-photo" data-category="event">
-
-            <img src="images/gallery3.jpg"
-                 alt="Event Photography">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Event</span>
-
-                    <h3>
-                        Celebration Highlights
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- Framing -->
-
-        <div class="gallery-photo" data-category="framing">
-
-            <img src="images/gallery4.jpg"
-                 alt="Custom Framing">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Framing</span>
-
-                    <h3>
-                        Premium Custom Frames
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- Wedding -->
-
-        <div class="gallery-photo" data-category="wedding">
-
-            <img src="images/gallery5.jpg"
-                 alt="Wedding Memories">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Wedding</span>
-
-                    <h3>
-                        Beautiful Wedding Stories
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- Portrait -->
-
-        <div class="gallery-photo" data-category="portrait">
-
-            <img src="images/gallery6.jpg"
-                 alt="Studio Portrait">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Portrait</span>
-
-                    <h3>
-                        Creative Studio Portrait
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- Event -->
-
-        <div class="gallery-photo" data-category="event">
-
-            <img src="images/gallery7.jpg"
-                 alt="Event Coverage">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Event</span>
-
-                    <h3>
-                        Special Event Coverage
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- Framing -->
-
-        <div class="gallery-photo" data-category="framing">
-
-            <img src="images/gallery8.jpg"
-                 alt="Photo Framing">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Framing</span>
-
-                    <h3>
-                        Framing Your Memories
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
-
-
-        <!-- Wedding -->
-
-        <div class="gallery-photo" data-category="wedding">
-
-            <img src="images/gallery9.jpg"
-                 alt="Wedding Couple">
-
-            <div class="gallery-overlay">
-
-                <div>
-                    <span>Wedding</span>
-
-                    <h3>
-                        Romantic Wedding Portrait
-                    </h3>
-                </div>
-
-                <i class="fas fa-magnifying-glass-plus"></i>
-
-            </div>
-
-        </div>
+        <!-- Photos from Supabase will appear here automatically -->
 
     </section>
 
@@ -513,7 +304,8 @@
 
 </div>
 
- <script src="js/script.js"></script>   
+ <script src="js/script.js"></script>
+    <script type="module" src="js/gallery.js"></script>   
 
 
 

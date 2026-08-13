@@ -2932,3 +2932,60 @@ footer h3,
     color:#ffffff;
     opacity:0.9;
 }
+/* =========================================
+   SMOOTH GALLERY FILTER ANIMATION
+========================================= */
+
+.gallery-photo{
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
+}
+
+.gallery-show{
+    display:block;
+    opacity:1;
+    transform:scale(1);
+    animation:galleryFilterIn 0.4s ease;
+}
+
+.gallery-hide{
+    display:none !important;
+}
+
+@keyframes galleryFilterIn{
+
+    from{
+        opacity:0;
+        transform:scale(0.94) translateY(10px);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+/* =========================================
+   ADMIN SECTION SWITCHING
+========================================= */
+
+.admin-section {
+    display: none;
+}
+
+.admin-section.active {
+    display: block;
+    animation: adminFadeIn 0.35s ease;
+}
+
+@keyframes adminFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
