@@ -2264,3 +2264,671 @@ RESPONSIVE
         font-size:30px;
     }
 }
+
+/* =========================================
+   AVENZA BROWN + WHITE THEME OVERRIDES
+========================================= */
+
+:root{
+    --main:#522f0f;
+    --secondary:#623913;
+    --white:#ffffff;
+    --soft:#f4eee8;
+    --border:rgba(255,255,255,0.20);
+}
+
+body{
+    background:var(--main);
+    color:var(--white);
+}
+
+p{
+    color:var(--soft);
+}
+
+.navbar{
+    background:rgba(82,47,15,0.94);
+    border-bottom:1px solid var(--border);
+}
+
+.logo,
+.logo span,
+.menu-toggle,
+.nav-links a,
+.active{
+    color:var(--white) !important;
+}
+
+.nav-links a:hover{
+    color:var(--white);
+    background:rgba(255,255,255,0.10);
+}
+
+.nav-links a::after{
+    background:var(--white);
+}
+
+.hero-overlay{
+    background:rgba(82,47,15,0.48);
+}
+
+.hero h1,
+.hero p{
+    color:var(--white);
+}
+
+.btn{
+    background:var(--white);
+    color:var(--main);
+    border:1px solid var(--white);
+}
+
+.btn:hover{
+    background:var(--secondary);
+    color:var(--white);
+    border-color:var(--white);
+}
+
+.btn-outline{
+    background:transparent;
+    color:var(--white);
+    border:1px solid var(--white);
+}
+
+.btn-outline:hover{
+    background:var(--white);
+    color:var(--main);
+}
+
+.about-preview h2,
+.services h2,
+.services-intro h2,
+.process-section h2,
+.why-us h2,
+.page-header h1,
+.story-content h2,
+.about-story h2,
+.mission-card h3,
+.team-section h2,
+.team-card h3,
+.price-card h2,
+.contact-info h2,
+.contact-form h2,
+.contact-card h2,
+.map-section h2,
+.faq-section h2,
+.gallery-intro h2,
+.custom-package-content h2,
+.pricing-intro h2,
+.stat-box h2,
+.section-label,
+.gallery-overlay span{
+    color:var(--white);
+}
+
+.service-card,
+.process-card,
+.gallery-item,
+.why-card,
+.stat-box,
+.mission-card,
+.team-card,
+.price-card,
+.contact-info,
+.contact-form,
+.contact-card,
+.faq-item{
+    background:var(--secondary);
+    color:var(--white);
+    border-color:var(--border);
+}
+
+.service-card i,
+.process-card span,
+.price-icon i,
+.price-card li i,
+.contact-details i,
+.faq-question i,
+.stat-box > i{
+    color:var(--white);
+}
+
+.price-icon{
+    background:rgba(255,255,255,0.12);
+}
+
+.about-preview p,
+.story-content p,
+.gallery-hero-content p,
+.gallery-intro p,
+.pricing-intro p,
+.package-subtitle,
+.price-card li,
+.custom-package-content p,
+.map-section p,
+.faq-intro,
+.faq-answer p,
+.contact-text{
+    color:var(--soft);
+}
+
+.page-header{
+    background:
+        linear-gradient(rgba(82,47,15,0.62), rgba(82,47,15,0.62)),
+        url('../images/banner.jpg');
+    background-size:cover;
+    background-position:center;
+}
+
+.gallery-filter button,
+.gallery-filter .filter-btn{
+    background:var(--secondary);
+    color:var(--white);
+    border:1px solid var(--border);
+}
+
+.gallery-filter button:hover,
+.gallery-filter .active,
+.gallery-filter .filter-btn:hover,
+.gallery-filter .filter-btn.active{
+    background:var(--white);
+    color:var(--main);
+    border-color:var(--white);
+}
+
+.gallery-photo{
+    background:var(--secondary);
+}
+
+.gallery-overlay{
+    background:linear-gradient(
+        to top,
+        rgba(82,47,15,0.94),
+        rgba(82,47,15,0.08) 70%
+    );
+}
+
+.gallery-overlay h3{
+    color:var(--white);
+}
+
+.gallery-overlay > i{
+    background:var(--white);
+    color:var(--main);
+}
+
+.gallery-hero{
+    background:
+        linear-gradient(rgba(82,47,15,0.35), rgba(82,47,15,0.82)),
+        url('../images/gallery-banner.jpg');
+    background-size:cover;
+    background-position:center;
+}
+
+.gallery-hero-overlay{
+    background:radial-gradient(
+        circle at center,
+        rgba(255,255,255,0.08),
+        rgba(82,47,15,0.22)
+    );
+}
+
+.gallery-cta{
+    background:
+        linear-gradient(rgba(82,47,15,0.90), rgba(82,47,15,0.90)),
+        url('../images/gallery-banner.jpg');
+    background-size:cover;
+    background-position:center;
+}
+
+.stats-section{
+    background:var(--main);
+}
+
+.popular{
+    border:2px solid var(--white);
+}
+
+.popular-badge{
+    background:var(--white);
+    color:var(--main);
+}
+
+.custom-package-content{
+    background:linear-gradient(
+        135deg,
+        rgba(255,255,255,0.10),
+        rgba(98,57,19,0.96)
+    );
+    border:1px solid var(--border);
+}
+
+.contact-form input,
+.contact-form textarea,
+.contact-form select{
+    background:var(--main);
+    color:var(--white);
+    border:1px solid var(--border);
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder{
+    color:rgba(255,255,255,0.72);
+}
+
+.contact-form button{
+    background:var(--white);
+    color:var(--main);
+}
+
+.map-box{
+    background:var(--secondary);
+}
+
+.faq-question{
+    color:var(--white);
+}
+
+footer{
+    background:var(--secondary);
+    color:var(--white);
+}
+
+footer h3,
+.social-links a{
+    color:var(--white);
+}
+
+.social-links a:hover{
+    color:var(--soft);
+}
+
+.lightbox{
+    background:rgba(82,47,15,0.96);
+}
+
+.lightbox-close{
+    color:var(--white);
+}
+
+.lightbox-close:hover{
+    color:var(--soft);
+}
+
+@media(max-width:768px){
+    .nav-links{
+        background:var(--secondary);
+        border:1px solid var(--border);
+    }
+}
+
+/* =========================================
+   LOGO VISIBILITY IMPROVEMENT
+========================================= */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.logo img{
+    width:75px;
+    height:75px;
+    object-fit:contain;
+    background:#ffffff;
+    padding:5px;
+    border-radius:50%;
+    box-shadow:0 4px 15px rgba(0,0,0,0.25);
+    transition:transform 0.3s ease;
+}
+
+.logo img:hover{
+    transform:scale(1.07);
+}
+
+.logo span{
+    color:#ffffff;
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+
+@media(max-width:768px){
+
+    .logo img{
+        width:58px;
+        height:58px;
+        padding:4px;
+    }
+
+    .logo span{
+        font-size:16px;
+        letter-spacing:1px;
+    }
+}
+
+@media(max-width:480px){
+
+    .logo img{
+        width:52px;
+        height:52px;
+    }
+
+    .logo span{
+        font-size:14px;
+    }
+}
+
+/* =========================================
+   PAGE TITLE VISIBILITY FIX
+   About / Services / Pricing / Contact
+========================================= */
+
+/* Main page banner titles */
+.page-header{
+    position:relative;
+    min-height:320px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:110px 20px 80px;
+    overflow:visible;
+    text-align:center;
+}
+
+.page-header::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(82,47,15,0.28);
+    z-index:0;
+    pointer-events:none;
+}
+
+.page-header h1,
+.page-header p{
+    position:relative;
+    z-index:1;
+}
+
+.page-header h1{
+    color:#ffffff !important;
+    font-size:56px;
+    line-height:1.2;
+    font-weight:800;
+    margin:0 0 14px;
+    padding:4px 10px;
+    text-shadow:0 3px 14px rgba(0,0,0,0.65);
+}
+
+.page-header p{
+    color:#ffffff !important;
+    font-size:18px;
+    max-width:760px;
+    margin:0 auto;
+    text-shadow:0 2px 10px rgba(0,0,0,0.55);
+}
+
+/* Services page heading */
+.services-intro h2{
+    color:#ffffff !important;
+    line-height:1.25;
+    font-weight:800;
+    text-shadow:0 2px 10px rgba(0,0,0,0.35);
+}
+
+/* Pricing page heading */
+.pricing-intro h2{
+    color:#ffffff !important;
+    line-height:1.25;
+    font-weight:800;
+    text-shadow:0 2px 10px rgba(0,0,0,0.35);
+}
+
+/* Contact page main card heading */
+.contact-card h2{
+    color:#ffffff !important;
+    line-height:1.25;
+    font-weight:800;
+    text-shadow:0 2px 10px rgba(0,0,0,0.35);
+}
+
+/* About page story heading */
+.story-content h2,
+.about-story h2{
+    color:#ffffff !important;
+    line-height:1.25;
+    font-weight:800;
+}
+
+/* Mobile title fixes */
+@media(max-width:768px){
+
+    .page-header{
+        min-height:250px;
+        padding:85px 20px 55px;
+    }
+
+    .page-header h1{
+        font-size:38px;
+        line-height:1.2;
+    }
+
+    .page-header p{
+        font-size:16px;
+    }
+
+    .services-intro h2,
+    .pricing-intro h2,
+    .contact-card h2,
+    .story-content h2,
+    .about-story h2{
+        font-size:32px;
+        line-height:1.25;
+    }
+}
+
+@media(max-width:480px){
+
+    .page-header{
+        min-height:220px;
+        padding:75px 16px 45px;
+    }
+
+    .page-header h1{
+        font-size:32px;
+    }
+
+    .services-intro h2,
+    .pricing-intro h2,
+    .contact-card h2,
+    .story-content h2,
+    .about-story h2{
+        font-size:28px;
+    }
+}
+/* =========================================
+   CLEAN PAGE HEADING SECTION
+========================================= */
+
+.page-header{
+    min-height:330px;
+    padding:110px 20px 80px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    /* Heading section eka anith content walin separate karanawa */
+    background:#623913;
+
+    border-bottom:4px solid #ffffff;
+}
+
+/* Main Heading */
+
+.page-header h1{
+    background:none !important;
+    border:none !important;
+    box-shadow:none !important;
+
+    color:#ffffff !important;
+
+    font-size:56px;
+    font-weight:800;
+    line-height:1.2;
+
+    margin:0 0 15px 0;
+    padding:0;
+
+    letter-spacing:1px;
+}
+
+/* Heading yata description */
+
+.page-header p{
+    color:#ffffff !important;
+
+    font-size:18px;
+    line-height:1.6;
+
+    max-width:750px;
+    margin:0 auto;
+
+    opacity:0.9;
+}
+
+/* Services page top section */
+
+.services-intro{
+    background:#623913;
+    text-align:center;
+    padding:90px 20px;
+
+    border-bottom:4px solid #ffffff;
+}
+
+.services-intro h2{
+    background:none !important;
+    border:none !important;
+    box-shadow:none !important;
+
+    color:#ffffff !important;
+    font-size:44px;
+    font-weight:800;
+    line-height:1.25;
+
+    margin-bottom:18px;
+}
+
+.services-intro p{
+    color:#ffffff;
+    max-width:750px;
+    margin:auto;
+    opacity:0.9;
+}
+
+/* Pricing intro */
+
+.pricing-intro{
+    max-width:none;
+    background:#623913;
+
+    padding:90px 20px;
+
+    text-align:center;
+
+    border-bottom:4px solid #ffffff;
+}
+
+.pricing-intro h2{
+    background:none !important;
+    border:none !important;
+    box-shadow:none !important;
+
+    color:#ffffff !important;
+
+    font-size:44px;
+    font-weight:800;
+    line-height:1.25;
+
+    margin-bottom:18px;
+}
+
+.pricing-intro p{
+    color:#ffffff;
+    opacity:0.9;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:768px){
+
+    .page-header{
+        min-height:250px;
+        padding:80px 20px 60px;
+    }
+
+    .page-header h1{
+        font-size:36px;
+    }
+
+    .page-header p{
+        font-size:16px;
+    }
+
+    .services-intro,
+    .pricing-intro{
+        padding:70px 20px;
+    }
+
+    .services-intro h2,
+    .pricing-intro h2{
+        font-size:32px;
+    }
+}
+
+@media(max-width:480px){
+
+    .page-header h1{
+        font-size:30px;
+    }
+
+    .services-intro h2,
+    .pricing-intro h2{
+        font-size:28px;
+    }
+}
+/* Pricing Packages - Remove Separate Heading Background */
+
+.pricing-intro{
+    max-width:900px;
+    margin:auto;
+    padding:90px 20px 20px;
+
+    background:transparent !important;
+    border-bottom:none !important;
+
+    text-align:center;
+}
+
+.pricing-intro h2{
+    background:none !important;
+    border:none !important;
+    box-shadow:none !important;
+
+    color:#ffffff !important;
+    padding:0 !important;
+}
+
+.pricing-intro p{
+    color:#ffffff;
+    opacity:0.9;
+}
