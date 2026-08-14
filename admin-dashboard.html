@@ -1,32 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Avenza Studio</title>
+
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
+
 <body>
+
 <div class="admin-dashboard">
+
     <aside class="admin-sidebar">
+
         <h2>AVENZA</h2>
         <p>Admin Panel</p>
+
         <nav>
-            <a href="#" class="admin-nav-link active" data-section="galleryManagement">
-                <i class="fas fa-images"></i> Gallery
+
+            <a href="#"
+               class="admin-nav-link active"
+               data-section="galleryManagement">
+                <i class="fas fa-images"></i>
+                Gallery
             </a>
-            <a href="#" class="admin-nav-link" data-section="servicesManagement">
-                <i class="fas fa-camera"></i> Services
+
+            <a href="#"
+               class="admin-nav-link"
+               data-section="servicesManagement">
+                <i class="fas fa-camera"></i>
+                Services
             </a>
-            <a href="#" class="admin-nav-link" data-section="pricingManagement">
-                <i class="fas fa-tags"></i> Pricing
+
+            <a href="#"
+               class="admin-nav-link"
+               data-section="pricingManagement">
+                <i class="fas fa-tags"></i>
+                Pricing
             </a>
+
+            <a href="#"
+               class="admin-nav-link"
+               data-section="settingsManagement">
+                <i class="fas fa-gear"></i>
+                Site Settings
+            </a>
+
         </nav>
-        <button id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Logout</button>
+
+        <button id="logoutBtn">
+            <i class="fas fa-right-from-bracket"></i>
+            Logout
+        </button>
+
     </aside>
 
     <main class="admin-main">
+
         <div class="admin-header">
             <div>
                 <h1>Admin Dashboard</h1>
@@ -35,11 +69,20 @@
         </div>
 
         <section id="galleryManagement" class="admin-section active">
+
             <h2>Gallery Management</h2>
+
             <div class="upload-card">
+
                 <form id="galleryUploadForm">
+
                     <label>Photo Title</label>
-                    <input type="text" id="photoTitle" placeholder="Wedding Photography" required>
+                    <input
+                        type="text"
+                        id="photoTitle"
+                        placeholder="Wedding Photography"
+                        required>
+
                     <label>Category</label>
                     <select id="photoCategory" required>
                         <option value="">Select Category</option>
@@ -48,25 +91,56 @@
                         <option value="event">Events</option>
                         <option value="framing">Framing</option>
                     </select>
+
                     <label>Select Photo</label>
-                    <input type="file" id="photoFile" accept="image/*" required>
-                    <button type="submit"><i class="fas fa-cloud-arrow-up"></i> Upload Photo</button>
+                    <input
+                        type="file"
+                        id="photoFile"
+                        accept="image/*"
+                        required>
+
+                    <button type="submit">
+                        <i class="fas fa-cloud-arrow-up"></i>
+                        Upload Photo
+                    </button>
+
                 </form>
+
                 <p id="uploadMessage"></p>
+
             </div>
-            <div class="admin-gallery-header"><h2>Current Gallery</h2></div>
+
+            <div class="admin-gallery-header">
+                <h2>Current Gallery</h2>
+            </div>
+
             <div id="adminGalleryGrid" class="admin-gallery-grid"></div>
+
         </section>
 
         <section id="servicesManagement" class="admin-section">
+
             <h2>Services Management</h2>
+
             <div class="upload-card">
+
                 <form id="serviceForm">
+
                     <input type="hidden" id="serviceId">
+
                     <label>Service Name</label>
-                    <input type="text" id="serviceName" placeholder="Wedding Photography" required>
+                    <input
+                        type="text"
+                        id="serviceName"
+                        placeholder="Wedding Photography"
+                        required>
+
                     <label>Service Description</label>
-                    <textarea id="serviceDescription" placeholder="Enter service description" required></textarea>
+                    <textarea
+                        id="serviceDescription"
+                        placeholder="Enter service description"
+                        required></textarea>
+
                     <label>Service Icon</label>
                     <select id="serviceIcon" required>
                         <option value="">Select Icon</option>
@@ -77,47 +151,195 @@
                         <option value="fas fa-border-all">Framing</option>
                         <option value="fas fa-palette">Editing</option>
                     </select>
+
                     <div class="service-form-buttons">
-                        <button type="submit" id="serviceSubmitBtn"><i class="fas fa-plus"></i> Add Service</button>
-                        <button type="button" id="cancelServiceEdit" style="display:none;">Cancel Edit</button>
+
+                        <button
+                            type="submit"
+                            id="serviceSubmitBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Service
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelServiceEdit"
+                            style="display:none;">
+                            Cancel Edit
+                        </button>
+
                     </div>
+
                 </form>
+
                 <p id="serviceMessage"></p>
+
             </div>
-            <div class="admin-gallery-header"><h2>Current Services</h2></div>
+
+            <div class="admin-gallery-header">
+                <h2>Current Services</h2>
+            </div>
+
             <div id="adminServicesGrid" class="admin-services-grid"></div>
+
         </section>
 
         <section id="pricingManagement" class="admin-section">
+
             <h2>Pricing Management</h2>
+
             <div class="upload-card">
+
                 <form id="pricingForm">
+
                     <input type="hidden" id="pricingId">
+
                     <label>Package Name</label>
-                    <input type="text" id="pricingName" placeholder="Basic" required>
+                    <input
+                        type="text"
+                        id="pricingName"
+                        placeholder="Basic"
+                        required>
+
                     <label>Price</label>
-                    <input type="text" id="pricingPrice" placeholder="Rs. 25,000" required>
+                    <input
+                        type="text"
+                        id="pricingPrice"
+                        placeholder="Rs. 25,000"
+                        required>
+
                     <label>Description</label>
-                    <textarea id="pricingDescription" placeholder="Perfect for simple photo sessions" required></textarea>
+                    <textarea
+                        id="pricingDescription"
+                        placeholder="Perfect for simple photo sessions"
+                        required></textarea>
+
                     <label>Features</label>
-                    <textarea id="pricingFeatures" placeholder="1 Hour Photography|20 Edited Photos|Digital Delivery|Basic Retouching" required></textarea>
+                    <textarea
+                        id="pricingFeatures"
+                        placeholder="1 Hour Photography|20 Edited Photos|Digital Delivery|Basic Retouching"
+                        required></textarea>
+
                     <small>Separate each feature using |</small>
+
                     <label class="popular-checkbox">
-                        <input type="checkbox" id="pricingPopular">
+                        <input
+                            type="checkbox"
+                            id="pricingPopular">
                         Mark as Most Popular
                     </label>
+
                     <div class="service-form-buttons">
-                        <button type="submit" id="pricingSubmitBtn"><i class="fas fa-plus"></i> Add Package</button>
-                        <button type="button" id="cancelPricingEdit" style="display:none;">Cancel Edit</button>
+
+                        <button
+                            type="submit"
+                            id="pricingSubmitBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Package
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelPricingEdit"
+                            style="display:none;">
+                            Cancel Edit
+                        </button>
+
                     </div>
+
                 </form>
+
                 <p id="pricingMessage"></p>
+
             </div>
-            <div class="admin-gallery-header"><h2>Current Packages</h2></div>
+
+            <div class="admin-gallery-header">
+                <h2>Current Packages</h2>
+            </div>
+
             <div id="adminPricingGrid" class="admin-pricing-grid"></div>
+
         </section>
+
+        <section id="settingsManagement" class="admin-section">
+
+            <h2>Site Settings</h2>
+
+            <div class="upload-card">
+
+                <form id="settingsForm">
+
+                    <label>Phone Number</label>
+                    <input
+                        type="text"
+                        id="settingsPhone"
+                        placeholder="+94 77 268 7814"
+                        required>
+
+                    <label>Email Address</label>
+                    <input
+                        type="email"
+                        id="settingsEmail"
+                        placeholder="info@avenzastudio.com"
+                        required>
+
+                    <label>Studio Address</label>
+                    <input
+                        type="text"
+                        id="settingsAddress"
+                        placeholder="Avenza Studio, Sri Lanka"
+                        required>
+
+                    <label>Opening Hours</label>
+                    <input
+                        type="text"
+                        id="settingsOpeningHours"
+                        placeholder="Mon - Sat : 9.00 AM - 6.00 PM"
+                        required>
+
+                    <label>Facebook URL</label>
+                    <input
+                        type="url"
+                        id="settingsFacebook"
+                        placeholder="https://facebook.com">
+
+                    <label>Instagram URL</label>
+                    <input
+                        type="url"
+                        id="settingsInstagram"
+                        placeholder="https://instagram.com">
+
+                    <label>YouTube URL</label>
+                    <input
+                        type="url"
+                        id="settingsYoutube"
+                        placeholder="https://youtube.com">
+
+                    <label>WhatsApp Number</label>
+                    <input
+                        type="text"
+                        id="settingsWhatsapp"
+                        placeholder="94772687814"
+                        required>
+
+                    <button type="submit">
+                        <i class="fas fa-floppy-disk"></i>
+                        Save Settings
+                    </button>
+
+                </form>
+
+                <p id="settingsMessage"></p>
+
+            </div>
+
+        </section>
+
     </main>
+
 </div>
+
 <script type="module" src="js/admin-dashboard.js"></script>
+
 </body>
 </html>

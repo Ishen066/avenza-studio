@@ -66,37 +66,42 @@
             <p>
                 <i class="fas fa-phone"></i>
                 <strong>Phone:</strong>
-                +94 77 268 7814
+                <span id="sitePhone">Loading...</span>
             </p>
 
             <p>
                 <i class="fas fa-envelope"></i>
                 <strong>Email:</strong>
-                info@avenzastudio.com
+                <span id="siteEmail">Loading...</span>
             </p>
 
             <p>
                 <i class="fas fa-location-dot"></i>
                 <strong>Location:</strong>
-                Avenza Studio, Sri Lanka
+                <span id="siteAddress">Loading...</span>
             </p>
 
             <p>
                 <i class="fas fa-clock"></i>
                 <strong>Opening Hours:</strong>
-                Monday - Saturday | 9:00 AM - 6:00 PM
+                <span id="siteOpeningHours">Loading...</span>
             </p>
 
         </div>
 
         <div class="contact-buttons">
 
-            <a href="tel:+94772687814" class="btn">
+            <a id="callNowBtn"
+               href="#"
+               class="btn">
+
                 <i class="fas fa-phone"></i>
                 Call Now
+
             </a>
 
-            <a href="https://wa.me/94772687814"
+            <a id="siteWhatsapp"
+               href="#"
                target="_blank"
                class="btn">
 
@@ -105,7 +110,8 @@
 
             </a>
 
-            <a href="mailto:info@avenzastudio.com"
+            <a id="emailNowBtn"
+               href="#"
                class="btn btn-outline">
 
                 <i class="fas fa-envelope"></i>
@@ -117,15 +123,21 @@
 
         <div class="social-links">
 
-            <a href="https://facebook.com" target="_blank">
+            <a id="siteFacebook"
+               href="#"
+               target="_blank">
                 <i class="fab fa-facebook"></i>
             </a>
 
-            <a href="https://instagram.com" target="_blank">
+            <a id="siteInstagram"
+               href="#"
+               target="_blank">
                 <i class="fab fa-instagram"></i>
             </a>
 
-            <a href="https://youtube.com" target="_blank">
+            <a id="siteYoutube"
+               href="#"
+               target="_blank">
                 <i class="fab fa-youtube"></i>
             </a>
 
@@ -231,8 +243,8 @@
 
             <div class="faq-answer">
                 <p>
-                    We are open Monday to Saturday
-                    from 9:00 AM to 6:00 PM.
+                    Our latest opening hours are shown above
+                    in the contact details section.
                 </p>
             </div>
 
@@ -242,7 +254,8 @@
 
 </section>
 
-<a href="https://wa.me/94772687814"
+<a id="floatingWhatsapp"
+   href="#"
    class="whatsapp-btn"
    target="_blank">
 
@@ -254,36 +267,61 @@
 
     <h3>Avenza Studio</h3>
 
-    <p>Capturing Moments, Framing Memories</p>
+    <p>
+        Capturing Moments, Framing Memories
+    </p>
 
     <div class="social-links">
 
-        <a href="https://facebook.com" target="_blank">
+        <a id="footerFacebook"
+           href="#"
+           target="_blank">
             <i class="fab fa-facebook"></i>
         </a>
 
-        <a href="https://instagram.com" target="_blank">
+        <a id="footerInstagram"
+           href="#"
+           target="_blank">
             <i class="fab fa-instagram"></i>
         </a>
 
-        <a href="https://youtube.com" target="_blank">
+        <a id="footerYoutube"
+           href="#"
+           target="_blank">
             <i class="fab fa-youtube"></i>
         </a>
 
-        <a href="https://wa.me/94772687814" target="_blank">
+        <a id="footerWhatsapp"
+           href="#"
+           target="_blank">
             <i class="fab fa-whatsapp"></i>
         </a>
 
     </div>
 
-    <p>Email: info@avenzastudio.com</p>
-    <p>Phone: +94 77 268 7814</p>
+    <p>
+        Email:
+        <span id="footerEmail">Loading...</span>
+    </p>
 
-    <p>© 2026 Avenza Studio. All Rights Reserved.</p>
+    <p>
+        Phone:
+        <span id="footerPhone">Loading...</span>
+    </p>
+
+    <p>
+        © 2026 Avenza Studio. All Rights Reserved.
+    </p>
 
 </footer>
 
 <script src="js/script.js"></script>
 
+<script
+    type="module"
+    src="js/site-settings.js">
+</script>
+
 </body>
+
 </html>

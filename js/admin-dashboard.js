@@ -46,6 +46,8 @@ const logoutBtn =
 
 async function loadGallery() {
 
+    if (!adminGalleryGrid) return;
+
     const { data, error } = await supabase
         .from("gallery")
         .select("*")
@@ -60,15 +62,18 @@ async function loadGallery() {
 
     adminGalleryGrid.innerHTML = "";
 
-    data.forEach((photo) => {
+    (data || []).forEach((photo) => {
 
-        const card = document.createElement("div");
+        const card =
+            document.createElement("div");
 
-        card.className = "admin-gallery-card";
+        card.className =
+            "admin-gallery-card";
 
         card.innerHTML = `
-            <img src="${photo.image_url}"
-                 alt="${photo.title}">
+            <img
+                src="${photo.image_url}"
+                alt="${photo.title}">
 
             <div class="admin-gallery-info">
 
@@ -87,7 +92,6 @@ async function loadGallery() {
         `;
 
         adminGalleryGrid.appendChild(card);
-
     });
 
     addDeleteEvents();
@@ -98,94 +102,114 @@ async function loadGallery() {
 // UPLOAD PHOTO
 // =====================================
 
-uploadForm.addEventListener(
-    "submit",
-    async function (event) {
+if (uploadForm) {
 
-        event.preventDefault();
+    uploadForm.addEventListener(
+        "submit",
+        async function (event) {
 
-        uploadMessage.textContent =
-            "Uploading photo...";
-
-        const title =
-            titleInput.value.trim();
-
-        const category =
-            categoryInput.value;
-
-        const file =
-            fileInput.files[0];
-
-        if (!file) {
-            uploadMessage.textContent =
-                "Please select a photo.";
-            return;
-        }
-
-        const fileName =
-            `${Date.now()}-${file.name}`;
-
-        const {
-            error: uploadError
-        } = await supabase.storage
-            .from("gallery-images")
-            .upload(fileName, file);
-
-        if (uploadError) {
-
-            console.error(
-                "Upload error:",
-                uploadError
-            );
+            event.preventDefault();
 
             uploadMessage.textContent =
-                "Image upload failed.";
+                "Uploading photo...";
 
-            return;
-        }
+            const title =
+                titleInput.value.trim();
 
-        const {
-            data: publicUrlData
-        } = supabase.storage
-            .from("gallery-images")
-            .getPublicUrl(fileName);
+            const category =
+                categoryInput.value;
 
-        const imageUrl =
-            publicUrlData.publicUrl;
+            const file =
+                fileInput.files[0];
 
-        const {
-            error: insertError
-        } = await supabase
-            .from("gallery")
-            .insert([
-                {
-                    title: title,
-                    category: category,
-                    image_url: imageUrl
-                }
-            ]);
+            if (!file) {
 
-        if (insertError) {
+                uploadMessage.textContent =
+                    "Please select a photo.";
 
-            console.error(
-                "Database insert error:",
-                insertError
-            );
+                return;
+            }
+
+
+            // Make filename safer
+            const safeFileName =
+                file.name.replace(/\s+/g, "-");
+
+            const fileName =
+                `${Date.now()}-${safeFileName}`;
+
+
+            // Upload image
+            const {
+                error: uploadError
+            } = await supabase.storage
+                .from("gallery-images")
+                .upload(fileName, file);
+
+
+            if (uploadError) {
+
+                console.error(
+                    "Upload error:",
+                    uploadError
+                );
+
+                uploadMessage.textContent =
+                    "Image upload failed.";
+
+                return;
+            }
+
+
+            // Get public URL
+            const {
+                data: publicUrlData
+            } = supabase.storage
+                .from("gallery-images")
+                .getPublicUrl(fileName);
+
+
+            const imageUrl =
+                publicUrlData.publicUrl;
+
+
+            // Insert gallery record
+            const {
+                error: insertError
+            } = await supabase
+                .from("gallery")
+                .insert([
+                    {
+                        title: title,
+                        category: category,
+                        image_url: imageUrl
+                    }
+                ]);
+
+
+            if (insertError) {
+
+                console.error(
+                    "Database insert error:",
+                    insertError
+                );
+
+                uploadMessage.textContent =
+                    "Photo details could not be saved.";
+
+                return;
+            }
+
 
             uploadMessage.textContent =
-                "Photo details could not be saved.";
+                "Photo uploaded successfully!";
 
-            return;
+            uploadForm.reset();
+
+            loadGallery();
         }
-
-        uploadMessage.textContent =
-            "Photo uploaded successfully!";
-
-        uploadForm.reset();
-
-        loadGallery();
-    }
-);
+    );
+}
 
 
 // =====================================
@@ -211,21 +235,22 @@ function addDeleteEvents() {
                 const imageUrl =
                     button.getAttribute("data-url");
 
+
                 const confirmDelete =
                     confirm(
                         "Are you sure you want to delete this photo?"
                     );
 
-                if (!confirmDelete) {
-                    return;
-                }
+                if (!confirmDelete) return;
 
-                const {
-                    error
-                } = await supabase
-                    .from("gallery")
-                    .delete()
-                    .eq("id", id);
+
+                // Delete database record
+                const { error } =
+                    await supabase
+                        .from("gallery")
+                        .delete()
+                        .eq("id", id);
+
 
                 if (error) {
 
@@ -237,18 +262,32 @@ function addDeleteEvents() {
                     return;
                 }
 
+
+                // Delete image from storage
                 const fileName =
                     imageUrl.split(
                         "/gallery-images/"
                     )[1];
 
+
                 if (fileName) {
 
-                    await supabase.storage
+                    const {
+                        error: storageDeleteError
+                    } = await supabase.storage
                         .from("gallery-images")
                         .remove([fileName]);
 
+
+                    if (storageDeleteError) {
+
+                        console.error(
+                            "Storage delete error:",
+                            storageDeleteError
+                        );
+                    }
                 }
+
 
                 loadGallery();
             }
@@ -259,7 +298,7 @@ function addDeleteEvents() {
 
 
 // =====================================
-// SERVICES MANAGEMENT ELEMENTS
+// SERVICES ELEMENTS
 // =====================================
 
 const serviceForm =
@@ -296,16 +335,16 @@ const adminServicesGrid =
 
 async function loadServices() {
 
-    if (!adminServicesGrid) {
-        return;
-    }
+    if (!adminServicesGrid) return;
 
-    const { data, error } = await supabase
-        .from("services")
-        .select("*")
-        .order("created_at", {
-            ascending: true
-        });
+    const { data, error } =
+        await supabase
+            .from("services")
+            .select("*")
+            .order("created_at", {
+                ascending: true
+            });
+
 
     if (error) {
 
@@ -317,9 +356,11 @@ async function loadServices() {
         return;
     }
 
+
     adminServicesGrid.innerHTML = "";
 
-    data.forEach((service) => {
+
+    (data || []).forEach((service) => {
 
         const card =
             document.createElement("div");
@@ -327,12 +368,18 @@ async function loadServices() {
         card.className =
             "admin-service-card";
 
+
         card.innerHTML = `
+
             <i class="${service.icon}"></i>
 
-            <h3>${service.name}</h3>
+            <h3>
+                ${service.name}
+            </h3>
 
-            <p>${service.description}</p>
+            <p>
+                ${service.description}
+            </p>
 
             <div class="admin-service-actions">
 
@@ -351,10 +398,12 @@ async function loadServices() {
             </div>
         `;
 
+
         adminServicesGrid.appendChild(card);
     });
 
-    addServiceButtonEvents(data);
+
+    addServiceButtonEvents(data || []);
 }
 
 
@@ -370,10 +419,13 @@ if (serviceForm) {
 
             event.preventDefault();
 
+
             const id =
                 serviceId.value;
 
+
             const serviceData = {
+
                 name:
                     serviceName.value.trim(),
 
@@ -384,7 +436,9 @@ if (serviceForm) {
                     serviceIcon.value
             };
 
+
             let error;
+
 
             if (id) {
 
@@ -408,6 +462,7 @@ if (serviceForm) {
                 error = result.error;
             }
 
+
             if (error) {
 
                 console.error(
@@ -421,10 +476,12 @@ if (serviceForm) {
                 return;
             }
 
+
             serviceMessage.textContent =
                 id
                     ? "Service updated successfully!"
                     : "Service added successfully!";
+
 
             resetServiceForm();
 
@@ -435,7 +492,7 @@ if (serviceForm) {
 
 
 // =====================================
-// EDIT / DELETE SERVICE BUTTONS
+// SERVICE EDIT / DELETE
 // =====================================
 
 function addServiceButtonEvents(services) {
@@ -460,15 +517,16 @@ function addServiceButtonEvents(services) {
                 const id =
                     button.getAttribute("data-id");
 
+
                 const service =
                     services.find(
                         (item) =>
                             String(item.id) === id
                     );
 
-                if (!service) {
-                    return;
-                }
+
+                if (!service) return;
+
 
                 serviceId.value =
                     service.id;
@@ -482,11 +540,14 @@ function addServiceButtonEvents(services) {
                 serviceIcon.value =
                     service.icon;
 
+
                 serviceSubmitBtn.textContent =
                     "Update Service";
 
+
                 cancelServiceEdit.style.display =
                     "inline-block";
+
 
                 serviceForm.scrollIntoView({
                     behavior: "smooth"
@@ -506,20 +567,22 @@ function addServiceButtonEvents(services) {
                 const id =
                     button.getAttribute("data-id");
 
+
                 const confirmDelete =
                     confirm(
                         "Are you sure you want to delete this service?"
                     );
 
-                if (!confirmDelete) {
-                    return;
-                }
+
+                if (!confirmDelete) return;
+
 
                 const { error } =
                     await supabase
                         .from("services")
                         .delete()
                         .eq("id", id);
+
 
                 if (error) {
 
@@ -530,6 +593,7 @@ function addServiceButtonEvents(services) {
 
                     return;
                 }
+
 
                 loadServices();
             }
@@ -562,16 +626,17 @@ if (cancelServiceEdit) {
 
 function resetServiceForm() {
 
-    if (!serviceForm) {
-        return;
-    }
+    if (!serviceForm) return;
+
 
     serviceForm.reset();
 
     serviceId.value = "";
 
-    serviceSubmitBtn.textContent =
-        "Add Service";
+
+    serviceSubmitBtn.innerHTML =
+        '<i class="fas fa-plus"></i> Add Service';
+
 
     cancelServiceEdit.style.display =
         "none";
@@ -579,67 +644,7 @@ function resetServiceForm() {
 
 
 // =====================================
-// LOGOUT
-// =====================================
-
-logoutBtn.addEventListener(
-    "click",
-    async function () {
-
-        await supabase.auth.signOut();
-
-        window.location.href =
-            "admin-login.html";
-
-    }
-);
-
-
-// =====================================
-// INITIAL LOAD
-// =====================================
-
-loadGallery();
-loadServices();
-// =====================================
-// ADMIN SIDEBAR SECTION SWITCHING
-// =====================================
-
-const adminNavLinks =
-    document.querySelectorAll(".admin-nav-link");
-
-const adminSections =
-    document.querySelectorAll(".admin-section");
-
-adminNavLinks.forEach((link) => {
-
-    link.addEventListener("click", function (event) {
-
-        event.preventDefault();
-
-        const sectionId =
-            this.getAttribute("data-section");
-
-        adminNavLinks.forEach((nav) => {
-            nav.classList.remove("active");
-        });
-
-        adminSections.forEach((section) => {
-            section.classList.remove("active");
-        });
-
-        this.classList.add("active");
-
-        const selectedSection =
-            document.getElementById(sectionId);
-
-        if (selectedSection) {
-            selectedSection.classList.add("active");
-        }
-
-    });
-    // =====================================
-// PRICING MANAGEMENT ELEMENTS
+// PRICING ELEMENTS
 // =====================================
 
 const pricingForm =
@@ -655,43 +660,58 @@ const pricingPrice =
     document.getElementById("pricingPrice");
 
 const pricingDescription =
-    document.getElementById("pricingDescription");
+    document.getElementById(
+        "pricingDescription"
+    );
 
 const pricingFeatures =
-    document.getElementById("pricingFeatures");
+    document.getElementById(
+        "pricingFeatures"
+    );
 
 const pricingPopular =
-    document.getElementById("pricingPopular");
+    document.getElementById(
+        "pricingPopular"
+    );
 
 const pricingMessage =
-    document.getElementById("pricingMessage");
+    document.getElementById(
+        "pricingMessage"
+    );
 
 const pricingSubmitBtn =
-    document.getElementById("pricingSubmitBtn");
+    document.getElementById(
+        "pricingSubmitBtn"
+    );
 
 const cancelPricingEdit =
-    document.getElementById("cancelPricingEdit");
+    document.getElementById(
+        "cancelPricingEdit"
+    );
 
 const adminPricingGrid =
-    document.getElementById("adminPricingGrid");
+    document.getElementById(
+        "adminPricingGrid"
+    );
 
 
 // =====================================
-// LOAD PRICING PACKAGES
+// LOAD PRICING
 // =====================================
 
 async function loadPricing() {
 
-    if (!adminPricingGrid) {
-        return;
-    }
+    if (!adminPricingGrid) return;
 
-    const { data, error } = await supabase
-        .from("pricing")
-        .select("*")
-        .order("created_at", {
-            ascending: true
-        });
+
+    const { data, error } =
+        await supabase
+            .from("pricing")
+            .select("*")
+            .order("created_at", {
+                ascending: true
+            });
+
 
     if (error) {
 
@@ -703,20 +723,25 @@ async function loadPricing() {
         return;
     }
 
+
     adminPricingGrid.innerHTML = "";
 
-    data.forEach((item) => {
+
+    (data || []).forEach((item) => {
 
         const card =
             document.createElement("div");
 
+
         card.className =
             "admin-pricing-card";
+
 
         const featureList =
             item.features
                 ? item.features.split("|")
                 : [];
+
 
         card.innerHTML = `
 
@@ -752,32 +777,30 @@ async function loadPricing() {
 
             </ul>
 
+
             <div class="admin-service-actions">
 
                 <button
                     class="edit-pricing-btn"
                     data-id="${item.id}">
-
                     Edit
-
                 </button>
 
                 <button
                     class="delete-pricing-btn"
                     data-id="${item.id}">
-
                     Delete
-
                 </button>
 
             </div>
         `;
 
-        adminPricingGrid.appendChild(card);
 
+        adminPricingGrid.appendChild(card);
     });
 
-    addPricingButtonEvents(data);
+
+    addPricingButtonEvents(data || []);
 }
 
 
@@ -793,8 +816,10 @@ if (pricingForm) {
 
             event.preventDefault();
 
+
             const id =
                 pricingId.value;
+
 
             const pricingData = {
 
@@ -814,7 +839,9 @@ if (pricingForm) {
                     pricingPopular.checked
             };
 
+
             let error;
+
 
             if (id) {
 
@@ -838,6 +865,7 @@ if (pricingForm) {
                 error = result.error;
             }
 
+
             if (error) {
 
                 console.error(
@@ -851,10 +879,12 @@ if (pricingForm) {
                 return;
             }
 
+
             pricingMessage.textContent =
                 id
                     ? "Package updated successfully!"
                     : "Package added successfully!";
+
 
             resetPricingForm();
 
@@ -865,7 +895,7 @@ if (pricingForm) {
 
 
 // =====================================
-// EDIT / DELETE PRICING
+// PRICING EDIT / DELETE
 // =====================================
 
 function addPricingButtonEvents(packages) {
@@ -892,15 +922,16 @@ function addPricingButtonEvents(packages) {
                         "data-id"
                     );
 
+
                 const item =
                     packages.find(
                         (packageItem) =>
                             String(packageItem.id) === id
                     );
 
-                if (!item) {
-                    return;
-                }
+
+                if (!item) return;
+
 
                 pricingId.value =
                     item.id;
@@ -915,16 +946,19 @@ function addPricingButtonEvents(packages) {
                     item.description;
 
                 pricingFeatures.value =
-                    item.features;
+                    item.features || "";
 
                 pricingPopular.checked =
-                    item.is_popular;
+                    Boolean(item.is_popular);
+
 
                 pricingSubmitBtn.textContent =
                     "Update Package";
 
+
                 cancelPricingEdit.style.display =
                     "inline-block";
+
 
                 pricingForm.scrollIntoView({
                     behavior: "smooth"
@@ -946,20 +980,22 @@ function addPricingButtonEvents(packages) {
                         "data-id"
                     );
 
+
                 const confirmDelete =
                     confirm(
                         "Are you sure you want to delete this package?"
                     );
 
-                if (!confirmDelete) {
-                    return;
-                }
+
+                if (!confirmDelete) return;
+
 
                 const { error } =
                     await supabase
                         .from("pricing")
                         .delete()
                         .eq("id", id);
+
 
                 if (error) {
 
@@ -970,6 +1006,7 @@ function addPricingButtonEvents(packages) {
 
                     return;
                 }
+
 
                 loadPricing();
             }
@@ -1002,16 +1039,17 @@ if (cancelPricingEdit) {
 
 function resetPricingForm() {
 
-    if (!pricingForm) {
-        return;
-    }
+    if (!pricingForm) return;
+
 
     pricingForm.reset();
 
     pricingId.value = "";
 
-    pricingSubmitBtn.textContent =
-        "Add Package";
+
+    pricingSubmitBtn.innerHTML =
+        '<i class="fas fa-plus"></i> Add Package';
+
 
     cancelPricingEdit.style.display =
         "none";
@@ -1019,9 +1057,325 @@ function resetPricingForm() {
 
 
 // =====================================
-// INITIAL PRICING LOAD
+// SITE SETTINGS ELEMENTS
 // =====================================
+
+const settingsForm =
+    document.getElementById(
+        "settingsForm"
+    );
+
+const settingsPhone =
+    document.getElementById(
+        "settingsPhone"
+    );
+
+const settingsEmail =
+    document.getElementById(
+        "settingsEmail"
+    );
+
+const settingsAddress =
+    document.getElementById(
+        "settingsAddress"
+    );
+
+const settingsOpeningHours =
+    document.getElementById(
+        "settingsOpeningHours"
+    );
+
+const settingsFacebook =
+    document.getElementById(
+        "settingsFacebook"
+    );
+
+const settingsInstagram =
+    document.getElementById(
+        "settingsInstagram"
+    );
+
+const settingsYoutube =
+    document.getElementById(
+        "settingsYoutube"
+    );
+
+const settingsWhatsapp =
+    document.getElementById(
+        "settingsWhatsapp"
+    );
+
+const settingsMessage =
+    document.getElementById(
+        "settingsMessage"
+    );
+
+
+let settingsRowId = null;
+
+
+// =====================================
+// LOAD SITE SETTINGS
+// =====================================
+
+async function loadSiteSettings() {
+
+    if (!settingsForm) return;
+
+
+    const { data, error } =
+        await supabase
+            .from("site_settings")
+            .select("*")
+            .limit(1)
+            .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "Load site settings error:",
+            error
+        );
+
+
+        settingsMessage.textContent =
+            "Unable to load site settings.";
+
+        return;
+    }
+
+
+    if (!data) {
+
+        settingsMessage.textContent =
+            "No site settings row found.";
+
+        return;
+    }
+
+
+    settingsRowId =
+        data.id;
+
+
+    settingsPhone.value =
+        data.phone || "";
+
+    settingsEmail.value =
+        data.email || "";
+
+    settingsAddress.value =
+        data.address || "";
+
+    settingsOpeningHours.value =
+        data.opening_hours || "";
+
+    settingsFacebook.value =
+        data.facebook_url || "";
+
+    settingsInstagram.value =
+        data.instagram_url || "";
+
+    settingsYoutube.value =
+        data.youtube_url || "";
+
+    settingsWhatsapp.value =
+        data.whatsapp_number || "";
+}
+
+
+// =====================================
+// UPDATE SITE SETTINGS
+// =====================================
+
+if (settingsForm) {
+
+    settingsForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            if (!settingsRowId) {
+
+                settingsMessage.textContent =
+                    "No settings record found.";
+
+                return;
+            }
+
+
+            settingsMessage.textContent =
+                "Saving settings...";
+
+
+            const settingsData = {
+
+                phone:
+                    settingsPhone.value.trim(),
+
+                email:
+                    settingsEmail.value.trim(),
+
+                address:
+                    settingsAddress.value.trim(),
+
+                opening_hours:
+                    settingsOpeningHours.value.trim(),
+
+                facebook_url:
+                    settingsFacebook.value.trim(),
+
+                instagram_url:
+                    settingsInstagram.value.trim(),
+
+                youtube_url:
+                    settingsYoutube.value.trim(),
+
+                whatsapp_number:
+                    settingsWhatsapp.value.trim()
+            };
+
+
+            const { error } =
+                await supabase
+                    .from("site_settings")
+                    .update(settingsData)
+                    .eq(
+                        "id",
+                        settingsRowId
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Settings update error:",
+                    error
+                );
+
+
+                settingsMessage.textContent =
+                    "Could not save settings.";
+
+                return;
+            }
+
+
+            settingsMessage.textContent =
+                "Settings updated successfully!";
+        }
+    );
+}
+
+
+// =====================================
+// ADMIN SIDEBAR SECTION SWITCHING
+// =====================================
+
+const adminNavLinks =
+    document.querySelectorAll(
+        ".admin-nav-link"
+    );
+
+const adminSections =
+    document.querySelectorAll(
+        ".admin-section"
+    );
+
+
+adminNavLinks.forEach((link) => {
+
+    link.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const sectionId =
+                this.getAttribute(
+                    "data-section"
+                );
+
+
+            adminNavLinks.forEach(
+                (nav) => {
+
+                    nav.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+            adminSections.forEach(
+                (section) => {
+
+                    section.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+            this.classList.add(
+                "active"
+            );
+
+
+            const selectedSection =
+                document.getElementById(
+                    sectionId
+                );
+
+
+            if (selectedSection) {
+
+                selectedSection.classList.add(
+                    "active"
+                );
+
+            }
+        }
+    );
+
+});
+
+
+// =====================================
+// LOGOUT
+// =====================================
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener(
+        "click",
+        async function () {
+
+            await supabase.auth.signOut();
+
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+    );
+}
+
+
+// =====================================
+// INITIAL LOAD
+// =====================================
+
+loadGallery();
+
+loadServices();
 
 loadPricing();
 
-});
+loadSiteSettings();

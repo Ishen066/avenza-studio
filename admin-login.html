@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,45 +9,197 @@
 
     <link rel="stylesheet" href="css/style.css">
 
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
 <body>
 
-    <section class="admin-login-section">
+<section class="admin-login-page">
 
-        <div class="admin-login-card">
+    <div class="admin-login-container">
 
-            <h1>Avenza Studio</h1>
+        <!-- LEFT BRAND PANEL -->
+        <div class="admin-login-brand">
 
-            <h2>Admin Login</h2>
+            <div class="admin-brand-overlay"></div>
 
-            <form id="adminLoginForm">
+            <div class="admin-brand-content">
 
-                <input
-                    type="email"
-                    id="adminEmail"
-                    placeholder="Admin Email"
-                    required>
+                <img
+                    src="images/logo.png"
+                    alt="Avenza Studio Logo"
+                    class="admin-login-logo">
 
-                <input
-                    type="password"
-                    id="adminPassword"
-                    placeholder="Password"
-                    required>
+                <span class="admin-login-label">
+                    Avenza Studio
+                </span>
 
-                <button type="submit" class="btn">
-                    Login
-                </button>
+                <h1>
+                    Manage Your Studio
+                    With Ease
+                </h1>
 
-            </form>
+                <p>
+                    Securely manage gallery photos,
+                    services, pricing packages and
+                    website information from one place.
+                </p>
 
-            <p id="loginMessage"></p>
+                <div class="admin-login-features">
+
+                    <div>
+                        <i class="fas fa-images"></i>
+                        <span>Gallery Management</span>
+                    </div>
+
+                    <div>
+                        <i class="fas fa-camera"></i>
+                        <span>Services Management</span>
+                    </div>
+
+                    <div>
+                        <i class="fas fa-tags"></i>
+                        <span>Pricing Management</span>
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </section>
 
-   <script type="module" src="js/admin-login.js"></script>
+        <!-- RIGHT LOGIN PANEL -->
+        <div class="admin-login-form-panel">
+
+            <div class="admin-login-card">
+
+                <div class="admin-login-heading">
+
+                    <span class="admin-login-small-title">
+                        Admin Portal
+                    </span>
+
+                    <h2>
+                        Welcome Back
+                    </h2>
+
+                    <p>
+                        Sign in to manage the Avenza Studio website.
+                    </p>
+
+                </div>
+
+
+                <form id="adminLoginForm">
+
+                    <!-- EMAIL -->
+
+                    <div class="admin-input-group">
+
+                        <label for="adminEmail">
+                            Email Address
+                        </label>
+
+                        <div class="admin-input-wrapper">
+
+                            <i class="fas fa-envelope"></i>
+
+                            <input
+                                type="email"
+                                id="adminEmail"
+                                placeholder="admin@avenzastudio.com"
+                                autocomplete="email"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="admin-input-group">
+
+                        <label for="adminPassword">
+                            Password
+                        </label>
+
+                        <div class="admin-input-wrapper">
+
+                            <i class="fas fa-lock"></i>
+
+                            <input
+                                type="password"
+                                id="adminPassword"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required>
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="passwordToggle"
+                                aria-label="Show password">
+
+                                <i class="fas fa-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MESSAGE -->
+
+                    <p
+                        id="loginMessage"
+                        class="admin-login-message">
+                    </p>
+
+
+                    <!-- LOGIN BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="admin-login-btn"
+                        id="adminLoginBtn">
+
+                        <span>Login to Dashboard</span>
+
+                        <i class="fas fa-arrow-right"></i>
+
+                    </button>
+
+                </form>
+
+
+                <div class="admin-login-footer">
+
+                    <i class="fas fa-shield-halved"></i>
+
+                    <span>
+                        Secure administrator access
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script
+    type="module"
+    src="js/admin-login.js">
+</script>
 
 </body>
+
 </html>
