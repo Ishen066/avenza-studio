@@ -4352,3 +4352,26 @@ footer h3,
         flex-direction:column;
     }
 }
+/* =========================================
+   AVENZA BRAND FONT - TIMES NEW ROMAN
+========================================= */
+
+/* Navbar - AVENZA STUDIO */
+.logo span{
+    font-family: "Times New Roman", Times, serif !important;
+}
+
+/* Footer - Avenza Studio */
+footer h3{
+    font-family: "Times New Roman", Times, serif !important;
+}
+
+/* Admin Dashboard - AVENZA */
+.admin-sidebar h2{
+    font-family: "Times New Roman", Times, serif !important;
+}
+
+/* Admin Login - Avenza Studio */
+.admin-brand-content h1{
+    font-family: "Times New Roman", Times, serif !important;
+}
