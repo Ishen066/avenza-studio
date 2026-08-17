@@ -39,6 +39,9 @@ const adminGalleryGrid =
 const logoutBtn =
     document.getElementById("logoutBtn");
 
+const galleryUploadBtn =
+    document.getElementById("galleryUploadBtn");
+
 
 // =====================================
 // LOAD GALLERY
@@ -111,7 +114,7 @@ if (uploadForm) {
             event.preventDefault();
 
             uploadMessage.textContent =
-                "Uploading photo...";
+                "Checking image...";
 
             const title =
                 titleInput.value.trim();
@@ -122,108 +125,192 @@ if (uploadForm) {
             const file =
                 fileInput.files[0];
 
-            if (!file) {
+            if (!title) {
+                uploadMessage.textContent =
+                    "Please enter a photo title.";
+                return;
+            }
 
+            if (!category) {
+                uploadMessage.textContent =
+                    "Please select a category.";
+                return;
+            }
+
+            if (!file) {
                 uploadMessage.textContent =
                     "Please select a photo.";
-
                 return;
             }
 
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
 
-            // Make filename safer
-            const safeFileName =
-                file.name.replace(/\s+/g, "-");
-
-            const fileName =
-                `${Date.now()}-${safeFileName}`;
-
-
-            // Upload image
-            const {
-                error: uploadError
-            } = await supabase.storage
-                .from("gallery-images")
-                .upload(fileName, file);
-
-
-            if (uploadError) {
-
-                console.error(
-                    "Upload error:",
-                    uploadError
-                );
+            if (!allowedTypes.includes(file.type)) {
 
                 uploadMessage.textContent =
-                    "Image upload failed.";
+                    "Only JPG, PNG and WEBP images are allowed.";
+
+                fileInput.value = "";
 
                 return;
             }
 
+            const maxFileSize =
+                5 * 1024 * 1024;
 
-            // Get public URL
-            const {
-                data: publicUrlData
-            } = supabase.storage
-                .from("gallery-images")
-                .getPublicUrl(fileName);
-
-
-            const imageUrl =
-                publicUrlData.publicUrl;
-
-
-            // Insert gallery record
-            const {
-                error: insertError
-            } = await supabase
-                .from("gallery")
-                .insert([
-                    {
-                        title: title,
-                        category: category,
-                        image_url: imageUrl
-                    }
-                ]);
-
-
-            if (insertError) {
-
-                console.error(
-                    "Database insert error:",
-                    insertError
-                );
+            if (file.size > maxFileSize) {
 
                 uploadMessage.textContent =
-                    "Photo details could not be saved.";
+                    "Image must be smaller than 5 MB.";
+
+                fileInput.value = "";
 
                 return;
             }
 
+            setGalleryUploadState(true);
 
             uploadMessage.textContent =
-                "Photo uploaded successfully!";
+                "Uploading photo...";
 
-            uploadForm.reset();
+            const cleanFileName =
+                file.name
+                    .toLowerCase()
+                    .replace(/[^a-z0-9.-]/g, "-")
+                    .replace(/-+/g, "-");
 
-            loadGallery();
+            const fileName =
+                `${Date.now()}-${cleanFileName}`;
+
+            try {
+
+                const {
+                    error: uploadError
+                } = await supabase.storage
+                    .from("gallery-images")
+                    .upload(fileName, file, {
+                        cacheControl: "3600",
+                        upsert: false
+                    });
+
+                if (uploadError) {
+
+                    console.error(
+                        "Upload error:",
+                        uploadError
+                    );
+
+                    uploadMessage.textContent =
+                        "Image upload failed.";
+
+                    return;
+                }
+
+                const {
+                    data: publicUrlData
+                } = supabase.storage
+                    .from("gallery-images")
+                    .getPublicUrl(fileName);
+
+                const imageUrl =
+                    publicUrlData.publicUrl;
+
+                const {
+                    error: insertError
+                } = await supabase
+                    .from("gallery")
+                    .insert([
+                        {
+                            title: title,
+                            category: category,
+                            image_url: imageUrl
+                        }
+                    ]);
+
+                if (insertError) {
+
+                    console.error(
+                        "Database insert error:",
+                        insertError
+                    );
+
+                    await supabase.storage
+                        .from("gallery-images")
+                        .remove([fileName]);
+
+                    uploadMessage.textContent =
+                        "Photo details could not be saved.";
+
+                    return;
+                }
+
+                uploadMessage.textContent =
+                    "Photo uploaded successfully!";
+
+                uploadForm.reset();
+
+                await loadGallery();
+
+            } catch (error) {
+
+                console.error(
+                    "Unexpected upload error:",
+                    error
+                );
+
+                uploadMessage.textContent =
+                    "Something went wrong while uploading.";
+
+            } finally {
+
+                setGalleryUploadState(false);
+            }
         }
     );
 }
 
 
 // =====================================
-// DELETE PHOTO
+// GALLERY BUTTON STATE
+// =====================================
+
+function setGalleryUploadState(isUploading) {
+
+    if (!galleryUploadBtn) return;
+
+    galleryUploadBtn.disabled =
+        isUploading;
+
+    if (isUploading) {
+
+        galleryUploadBtn.innerHTML = `
+            <i class="fas fa-spinner fa-spin"></i>
+            Uploading...
+        `;
+
+    } else {
+
+        galleryUploadBtn.innerHTML = `
+            <i class="fas fa-cloud-arrow-up"></i>
+            Upload Photo
+        `;
+    }
+}
+
+
+// =====================================
+// DELETE GALLERY PHOTO
 // =====================================
 
 function addDeleteEvents() {
 
-    const deleteButtons =
-        document.querySelectorAll(
-            ".delete-photo-btn"
-        );
-
-    deleteButtons.forEach((button) => {
+    document.querySelectorAll(
+        ".delete-photo-btn"
+    ).forEach((button) => {
 
         button.addEventListener(
             "click",
@@ -235,22 +322,17 @@ function addDeleteEvents() {
                 const imageUrl =
                     button.getAttribute("data-url");
 
+                if (!confirm(
+                    "Are you sure you want to delete this photo?"
+                )) {
+                    return;
+                }
 
-                const confirmDelete =
-                    confirm(
-                        "Are you sure you want to delete this photo?"
-                    );
-
-                if (!confirmDelete) return;
-
-
-                // Delete database record
                 const { error } =
                     await supabase
                         .from("gallery")
                         .delete()
                         .eq("id", id);
-
 
                 if (error) {
 
@@ -262,13 +344,10 @@ function addDeleteEvents() {
                     return;
                 }
 
-
-                // Delete image from storage
                 const fileName =
                     imageUrl.split(
                         "/gallery-images/"
                     )[1];
-
 
                 if (fileName) {
 
@@ -277,7 +356,6 @@ function addDeleteEvents() {
                     } = await supabase.storage
                         .from("gallery-images")
                         .remove([fileName]);
-
 
                     if (storageDeleteError) {
 
@@ -288,11 +366,9 @@ function addDeleteEvents() {
                     }
                 }
 
-
                 loadGallery();
             }
         );
-
     });
 }
 
@@ -345,7 +421,6 @@ async function loadServices() {
                 ascending: true
             });
 
-
     if (error) {
 
         console.error(
@@ -356,9 +431,7 @@ async function loadServices() {
         return;
     }
 
-
     adminServicesGrid.innerHTML = "";
-
 
     (data || []).forEach((service) => {
 
@@ -368,18 +441,13 @@ async function loadServices() {
         card.className =
             "admin-service-card";
 
-
         card.innerHTML = `
 
             <i class="${service.icon}"></i>
 
-            <h3>
-                ${service.name}
-            </h3>
+            <h3>${service.name}</h3>
 
-            <p>
-                ${service.description}
-            </p>
+            <p>${service.description}</p>
 
             <div class="admin-service-actions">
 
@@ -398,10 +466,8 @@ async function loadServices() {
             </div>
         `;
 
-
         adminServicesGrid.appendChild(card);
     });
-
 
     addServiceButtonEvents(data || []);
 }
@@ -419,10 +485,8 @@ if (serviceForm) {
 
             event.preventDefault();
 
-
             const id =
                 serviceId.value;
-
 
             const serviceData = {
 
@@ -436,9 +500,7 @@ if (serviceForm) {
                     serviceIcon.value
             };
 
-
             let error;
-
 
             if (id) {
 
@@ -462,7 +524,6 @@ if (serviceForm) {
                 error = result.error;
             }
 
-
             if (error) {
 
                 console.error(
@@ -476,12 +537,10 @@ if (serviceForm) {
                 return;
             }
 
-
             serviceMessage.textContent =
                 id
                     ? "Service updated successfully!"
                     : "Service added successfully!";
-
 
             resetServiceForm();
 
@@ -497,18 +556,9 @@ if (serviceForm) {
 
 function addServiceButtonEvents(services) {
 
-    const editButtons =
-        document.querySelectorAll(
-            ".edit-service-btn"
-        );
-
-    const deleteButtons =
-        document.querySelectorAll(
-            ".delete-service-btn"
-        );
-
-
-    editButtons.forEach((button) => {
+    document.querySelectorAll(
+        ".edit-service-btn"
+    ).forEach((button) => {
 
         button.addEventListener(
             "click",
@@ -517,16 +567,13 @@ function addServiceButtonEvents(services) {
                 const id =
                     button.getAttribute("data-id");
 
-
                 const service =
                     services.find(
-                        (item) =>
+                        item =>
                             String(item.id) === id
                     );
 
-
                 if (!service) return;
-
 
                 serviceId.value =
                     service.id;
@@ -540,25 +587,23 @@ function addServiceButtonEvents(services) {
                 serviceIcon.value =
                     service.icon;
 
-
                 serviceSubmitBtn.textContent =
                     "Update Service";
 
-
                 cancelServiceEdit.style.display =
                     "inline-block";
-
 
                 serviceForm.scrollIntoView({
                     behavior: "smooth"
                 });
             }
         );
-
     });
 
 
-    deleteButtons.forEach((button) => {
+    document.querySelectorAll(
+        ".delete-service-btn"
+    ).forEach((button) => {
 
         button.addEventListener(
             "click",
@@ -567,22 +612,17 @@ function addServiceButtonEvents(services) {
                 const id =
                     button.getAttribute("data-id");
 
-
-                const confirmDelete =
-                    confirm(
-                        "Are you sure you want to delete this service?"
-                    );
-
-
-                if (!confirmDelete) return;
-
+                if (!confirm(
+                    "Are you sure you want to delete this service?"
+                )) {
+                    return;
+                }
 
                 const { error } =
                     await supabase
                         .from("services")
                         .delete()
                         .eq("id", id);
-
 
                 if (error) {
 
@@ -594,49 +634,32 @@ function addServiceButtonEvents(services) {
                     return;
                 }
 
-
                 loadServices();
             }
         );
-
     });
 }
 
-
-// =====================================
-// CANCEL SERVICE EDIT
-// =====================================
 
 if (cancelServiceEdit) {
 
     cancelServiceEdit.addEventListener(
         "click",
-        function () {
-
-            resetServiceForm();
-
-        }
+        resetServiceForm
     );
 }
 
-
-// =====================================
-// RESET SERVICE FORM
-// =====================================
 
 function resetServiceForm() {
 
     if (!serviceForm) return;
 
-
     serviceForm.reset();
 
     serviceId.value = "";
 
-
     serviceSubmitBtn.innerHTML =
         '<i class="fas fa-plus"></i> Add Service';
-
 
     cancelServiceEdit.style.display =
         "none";
@@ -660,39 +683,25 @@ const pricingPrice =
     document.getElementById("pricingPrice");
 
 const pricingDescription =
-    document.getElementById(
-        "pricingDescription"
-    );
+    document.getElementById("pricingDescription");
 
 const pricingFeatures =
-    document.getElementById(
-        "pricingFeatures"
-    );
+    document.getElementById("pricingFeatures");
 
 const pricingPopular =
-    document.getElementById(
-        "pricingPopular"
-    );
+    document.getElementById("pricingPopular");
 
 const pricingMessage =
-    document.getElementById(
-        "pricingMessage"
-    );
+    document.getElementById("pricingMessage");
 
 const pricingSubmitBtn =
-    document.getElementById(
-        "pricingSubmitBtn"
-    );
+    document.getElementById("pricingSubmitBtn");
 
 const cancelPricingEdit =
-    document.getElementById(
-        "cancelPricingEdit"
-    );
+    document.getElementById("cancelPricingEdit");
 
 const adminPricingGrid =
-    document.getElementById(
-        "adminPricingGrid"
-    );
+    document.getElementById("adminPricingGrid");
 
 
 // =====================================
@@ -703,7 +712,6 @@ async function loadPricing() {
 
     if (!adminPricingGrid) return;
 
-
     const { data, error } =
         await supabase
             .from("pricing")
@@ -711,7 +719,6 @@ async function loadPricing() {
             .order("created_at", {
                 ascending: true
             });
-
 
     if (error) {
 
@@ -723,60 +730,49 @@ async function loadPricing() {
         return;
     }
 
-
     adminPricingGrid.innerHTML = "";
-
 
     (data || []).forEach((item) => {
 
         const card =
             document.createElement("div");
 
-
         card.className =
             "admin-pricing-card";
-
 
         const featureList =
             item.features
                 ? item.features.split("|")
                 : [];
 
-
         card.innerHTML = `
 
             ${
                 item.is_popular
                     ? '<span class="popular-badge">Most Popular</span>'
-                    : ''
+                    : ""
             }
 
-            <h3>
-                ${item.name}
-            </h3>
+            <h3>${item.name}</h3>
 
-            <h4>
-                ${item.price}
-            </h4>
+            <h4>${item.price}</h4>
 
-            <p>
-                ${item.description}
-            </p>
+            <p>${item.description}</p>
 
             <ul>
 
                 ${featureList
                     .map(
-                        (feature) =>
-                            `<li>
+                        feature => `
+                            <li>
                                 <i class="fas fa-check"></i>
                                 ${feature.trim()}
-                            </li>`
+                            </li>
+                        `
                     )
                     .join("")}
 
             </ul>
-
 
             <div class="admin-service-actions">
 
@@ -795,10 +791,8 @@ async function loadPricing() {
             </div>
         `;
 
-
         adminPricingGrid.appendChild(card);
     });
-
 
     addPricingButtonEvents(data || []);
 }
@@ -816,10 +810,8 @@ if (pricingForm) {
 
             event.preventDefault();
 
-
             const id =
                 pricingId.value;
-
 
             const pricingData = {
 
@@ -839,9 +831,7 @@ if (pricingForm) {
                     pricingPopular.checked
             };
 
-
             let error;
-
 
             if (id) {
 
@@ -865,7 +855,6 @@ if (pricingForm) {
                 error = result.error;
             }
 
-
             if (error) {
 
                 console.error(
@@ -879,12 +868,10 @@ if (pricingForm) {
                 return;
             }
 
-
             pricingMessage.textContent =
                 id
                     ? "Package updated successfully!"
                     : "Package added successfully!";
-
 
             resetPricingForm();
 
@@ -900,38 +887,24 @@ if (pricingForm) {
 
 function addPricingButtonEvents(packages) {
 
-    const editButtons =
-        document.querySelectorAll(
-            ".edit-pricing-btn"
-        );
-
-    const deleteButtons =
-        document.querySelectorAll(
-            ".delete-pricing-btn"
-        );
-
-
-    editButtons.forEach((button) => {
+    document.querySelectorAll(
+        ".edit-pricing-btn"
+    ).forEach((button) => {
 
         button.addEventListener(
             "click",
             function () {
 
                 const id =
-                    button.getAttribute(
-                        "data-id"
-                    );
-
+                    button.getAttribute("data-id");
 
                 const item =
                     packages.find(
-                        (packageItem) =>
+                        packageItem =>
                             String(packageItem.id) === id
                     );
 
-
                 if (!item) return;
-
 
                 pricingId.value =
                     item.id;
@@ -951,51 +924,42 @@ function addPricingButtonEvents(packages) {
                 pricingPopular.checked =
                     Boolean(item.is_popular);
 
-
                 pricingSubmitBtn.textContent =
                     "Update Package";
 
-
                 cancelPricingEdit.style.display =
                     "inline-block";
-
 
                 pricingForm.scrollIntoView({
                     behavior: "smooth"
                 });
             }
         );
-
     });
 
 
-    deleteButtons.forEach((button) => {
+    document.querySelectorAll(
+        ".delete-pricing-btn"
+    ).forEach((button) => {
 
         button.addEventListener(
             "click",
             async function () {
 
                 const id =
-                    button.getAttribute(
-                        "data-id"
-                    );
+                    button.getAttribute("data-id");
 
-
-                const confirmDelete =
-                    confirm(
-                        "Are you sure you want to delete this package?"
-                    );
-
-
-                if (!confirmDelete) return;
-
+                if (!confirm(
+                    "Are you sure you want to delete this package?"
+                )) {
+                    return;
+                }
 
                 const { error } =
                     await supabase
                         .from("pricing")
                         .delete()
                         .eq("id", id);
-
 
                 if (error) {
 
@@ -1007,49 +971,32 @@ function addPricingButtonEvents(packages) {
                     return;
                 }
 
-
                 loadPricing();
             }
         );
-
     });
 }
 
-
-// =====================================
-// CANCEL PRICING EDIT
-// =====================================
 
 if (cancelPricingEdit) {
 
     cancelPricingEdit.addEventListener(
         "click",
-        function () {
-
-            resetPricingForm();
-
-        }
+        resetPricingForm
     );
 }
 
-
-// =====================================
-// RESET PRICING FORM
-// =====================================
 
 function resetPricingForm() {
 
     if (!pricingForm) return;
 
-
     pricingForm.reset();
 
     pricingId.value = "";
 
-
     pricingSubmitBtn.innerHTML =
         '<i class="fas fa-plus"></i> Add Package';
-
 
     cancelPricingEdit.style.display =
         "none";
@@ -1061,55 +1008,34 @@ function resetPricingForm() {
 // =====================================
 
 const settingsForm =
-    document.getElementById(
-        "settingsForm"
-    );
+    document.getElementById("settingsForm");
 
 const settingsPhone =
-    document.getElementById(
-        "settingsPhone"
-    );
+    document.getElementById("settingsPhone");
 
 const settingsEmail =
-    document.getElementById(
-        "settingsEmail"
-    );
+    document.getElementById("settingsEmail");
 
 const settingsAddress =
-    document.getElementById(
-        "settingsAddress"
-    );
+    document.getElementById("settingsAddress");
 
 const settingsOpeningHours =
-    document.getElementById(
-        "settingsOpeningHours"
-    );
+    document.getElementById("settingsOpeningHours");
 
 const settingsFacebook =
-    document.getElementById(
-        "settingsFacebook"
-    );
+    document.getElementById("settingsFacebook");
 
 const settingsInstagram =
-    document.getElementById(
-        "settingsInstagram"
-    );
+    document.getElementById("settingsInstagram");
 
 const settingsYoutube =
-    document.getElementById(
-        "settingsYoutube"
-    );
+    document.getElementById("settingsYoutube");
 
 const settingsWhatsapp =
-    document.getElementById(
-        "settingsWhatsapp"
-    );
+    document.getElementById("settingsWhatsapp");
 
 const settingsMessage =
-    document.getElementById(
-        "settingsMessage"
-    );
-
+    document.getElementById("settingsMessage");
 
 let settingsRowId = null;
 
@@ -1122,14 +1048,12 @@ async function loadSiteSettings() {
 
     if (!settingsForm) return;
 
-
     const { data, error } =
         await supabase
             .from("site_settings")
             .select("*")
             .limit(1)
             .maybeSingle();
-
 
     if (error) {
 
@@ -1138,13 +1062,11 @@ async function loadSiteSettings() {
             error
         );
 
-
         settingsMessage.textContent =
             "Unable to load site settings.";
 
         return;
     }
-
 
     if (!data) {
 
@@ -1154,10 +1076,8 @@ async function loadSiteSettings() {
         return;
     }
 
-
     settingsRowId =
         data.id;
-
 
     settingsPhone.value =
         data.phone || "";
@@ -1197,7 +1117,6 @@ if (settingsForm) {
 
             event.preventDefault();
 
-
             if (!settingsRowId) {
 
                 settingsMessage.textContent =
@@ -1206,10 +1125,8 @@ if (settingsForm) {
                 return;
             }
 
-
             settingsMessage.textContent =
                 "Saving settings...";
-
 
             const settingsData = {
 
@@ -1238,7 +1155,6 @@ if (settingsForm) {
                     settingsWhatsapp.value.trim()
             };
 
-
             const { error } =
                 await supabase
                     .from("site_settings")
@@ -1248,7 +1164,6 @@ if (settingsForm) {
                         settingsRowId
                     );
 
-
             if (error) {
 
                 console.error(
@@ -1256,18 +1171,994 @@ if (settingsForm) {
                     error
                 );
 
-
                 settingsMessage.textContent =
                     "Could not save settings.";
 
                 return;
             }
 
-
             settingsMessage.textContent =
                 "Settings updated successfully!";
         }
     );
+}
+
+
+// =====================================
+// ABOUT MANAGEMENT ELEMENTS
+// =====================================
+
+const aboutSettingsForm =
+    document.getElementById(
+        "aboutSettingsForm"
+    );
+
+const aboutStoryTitle =
+    document.getElementById(
+        "aboutStoryTitle"
+    );
+
+const aboutStoryText1 =
+    document.getElementById(
+        "aboutStoryText1"
+    );
+
+const aboutStoryText2 =
+    document.getElementById(
+        "aboutStoryText2"
+    );
+
+const aboutStudioImage =
+    document.getElementById(
+        "aboutStudioImage"
+    );
+
+const aboutStudioPreview =
+    document.getElementById(
+        "aboutStudioPreview"
+    );
+
+const aboutSettingsMessage =
+    document.getElementById(
+        "aboutSettingsMessage"
+    );
+
+const aboutSettingsSaveBtn =
+    document.getElementById(
+        "aboutSettingsSaveBtn"
+    );
+
+
+// =====================================
+// TEAM MEMBER ELEMENTS
+// =====================================
+
+const teamMemberForm =
+    document.getElementById(
+        "teamMemberForm"
+    );
+
+const teamMemberId =
+    document.getElementById(
+        "teamMemberId"
+    );
+
+const teamMemberOldImageUrl =
+    document.getElementById(
+        "teamMemberOldImageUrl"
+    );
+
+const teamMemberName =
+    document.getElementById(
+        "teamMemberName"
+    );
+
+const teamMemberRole =
+    document.getElementById(
+        "teamMemberRole"
+    );
+
+const teamMemberDescription =
+    document.getElementById(
+        "teamMemberDescription"
+    );
+
+const teamMemberOrder =
+    document.getElementById(
+        "teamMemberOrder"
+    );
+
+const teamMemberImage =
+    document.getElementById(
+        "teamMemberImage"
+    );
+
+const teamMemberMessage =
+    document.getElementById(
+        "teamMemberMessage"
+    );
+
+const teamMemberSubmitBtn =
+    document.getElementById(
+        "teamMemberSubmitBtn"
+    );
+
+const cancelTeamMemberEdit =
+    document.getElementById(
+        "cancelTeamMemberEdit"
+    );
+
+const adminTeamGrid =
+    document.getElementById(
+        "adminTeamGrid"
+    );
+
+let aboutSettingsRowId = null;
+
+let currentStudioImageUrl = "";
+
+
+// =====================================
+// ABOUT IMAGE VALIDATION
+// =====================================
+
+function validateAboutImage(file) {
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+
+        return "Only JPG, PNG and WEBP images are allowed.";
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+
+        return "Image must be smaller than 5 MB.";
+    }
+
+    return "";
+}
+
+
+// =====================================
+// CREATE SAFE FILE NAME
+// =====================================
+
+function createSafeImageFileName(
+    file,
+    prefix
+) {
+
+    const cleanFileName =
+        file.name
+            .toLowerCase()
+            .replace(
+                /[^a-z0-9.-]/g,
+                "-"
+            )
+            .replace(
+                /-+/g,
+                "-"
+            );
+
+    return `${prefix}-${Date.now()}-${cleanFileName}`;
+}
+
+
+// =====================================
+// UPLOAD ABOUT IMAGE
+// =====================================
+
+async function uploadAboutImage(
+    file,
+    prefix
+) {
+
+    const fileName =
+        createSafeImageFileName(
+            file,
+            prefix
+        );
+
+    const {
+        error: uploadError
+    } = await supabase.storage
+        .from("about-images")
+        .upload(
+            fileName,
+            file,
+            {
+                cacheControl: "3600",
+                upsert: false
+            }
+        );
+
+    if (uploadError) {
+
+        throw uploadError;
+    }
+
+    const {
+        data: publicUrlData
+    } = supabase.storage
+        .from("about-images")
+        .getPublicUrl(fileName);
+
+    return publicUrlData.publicUrl;
+}
+
+
+// =====================================
+// GET STORAGE FILE NAME
+// =====================================
+
+function getAboutStorageFileName(
+    imageUrl
+) {
+
+    if (!imageUrl) return "";
+
+    const parts =
+        imageUrl.split(
+            "/about-images/"
+        );
+
+    return parts.length > 1
+        ? decodeURIComponent(parts[1])
+        : "";
+}
+
+
+// =====================================
+// REMOVE ABOUT IMAGE
+// =====================================
+
+async function removeAboutImageByUrl(
+    imageUrl
+) {
+
+    const fileName =
+        getAboutStorageFileName(
+            imageUrl
+        );
+
+    if (!fileName) return;
+
+    const { error } =
+        await supabase.storage
+            .from("about-images")
+            .remove([
+                fileName
+            ]);
+
+    if (error) {
+
+        console.error(
+            "About image delete error:",
+            error
+        );
+    }
+}
+
+
+// =====================================
+// STUDIO IMAGE PREVIEW
+// =====================================
+
+function renderStudioPreview(
+    imageUrl
+) {
+
+    if (!aboutStudioPreview) return;
+
+    if (!imageUrl) {
+
+        aboutStudioPreview.innerHTML =
+            "<p>No studio image available.</p>";
+
+        return;
+    }
+
+    aboutStudioPreview.innerHTML = `
+        <img
+            src="${imageUrl}"
+            alt="Current studio photo"
+            style="
+                width:100%;
+                max-width:420px;
+                height:240px;
+                object-fit:cover;
+                border-radius:14px;
+                display:block;
+            ">
+    `;
+}
+
+
+// =====================================
+// LOAD ABOUT SETTINGS
+// =====================================
+
+async function loadAboutSettings() {
+
+    if (!aboutSettingsForm) return;
+
+    const { data, error } =
+        await supabase
+            .from("about_settings")
+            .select("*")
+            .limit(1)
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(
+            "Load about settings error:",
+            error
+        );
+
+        aboutSettingsMessage.textContent =
+            "Unable to load about settings.";
+
+        return;
+    }
+
+    if (!data) {
+
+        aboutSettingsMessage.textContent =
+            "No about settings row found.";
+
+        return;
+    }
+
+    aboutSettingsRowId =
+        data.id;
+
+    currentStudioImageUrl =
+        data.studio_image_url || "";
+
+    aboutStoryTitle.value =
+        data.story_title || "";
+
+    aboutStoryText1.value =
+        data.story_text_1 || "";
+
+    aboutStoryText2.value =
+        data.story_text_2 || "";
+
+    renderStudioPreview(
+        currentStudioImageUrl
+    );
+}
+
+
+// =====================================
+// UPDATE ABOUT SETTINGS
+// =====================================
+
+if (aboutSettingsForm) {
+
+    aboutSettingsForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+            if (!aboutSettingsRowId) {
+
+                aboutSettingsMessage.textContent =
+                    "No about settings record found.";
+
+                return;
+            }
+
+            aboutSettingsSaveBtn.disabled =
+                true;
+
+            aboutSettingsSaveBtn.innerHTML = `
+                <i class="fas fa-spinner fa-spin"></i>
+                Saving...
+            `;
+
+            aboutSettingsMessage.textContent =
+                "Saving about settings...";
+
+            let newStudioImageUrl =
+                currentStudioImageUrl;
+
+            let uploadedNewImage =
+                false;
+
+            try {
+
+                const newImage =
+                    aboutStudioImage.files[0];
+
+                if (newImage) {
+
+                    const validationError =
+                        validateAboutImage(
+                            newImage
+                        );
+
+                    if (validationError) {
+
+                        aboutSettingsMessage.textContent =
+                            validationError;
+
+                        return;
+                    }
+
+                    newStudioImageUrl =
+                        await uploadAboutImage(
+                            newImage,
+                            "studio"
+                        );
+
+                    uploadedNewImage =
+                        true;
+                }
+
+                const { error } =
+                    await supabase
+                        .from("about_settings")
+                        .update({
+
+                            studio_image_url:
+                                newStudioImageUrl,
+
+                            story_title:
+                                aboutStoryTitle.value.trim(),
+
+                            story_text_1:
+                                aboutStoryText1.value.trim(),
+
+                            story_text_2:
+                                aboutStoryText2.value.trim()
+                        })
+                        .eq(
+                            "id",
+                            aboutSettingsRowId
+                        );
+
+                if (error) {
+
+                    console.error(
+                        "About settings update error:",
+                        error
+                    );
+
+                    if (uploadedNewImage) {
+
+                        await removeAboutImageByUrl(
+                            newStudioImageUrl
+                        );
+                    }
+
+                    aboutSettingsMessage.textContent =
+                        "Could not save about settings.";
+
+                    return;
+                }
+
+                if (
+                    uploadedNewImage &&
+                    currentStudioImageUrl &&
+                    currentStudioImageUrl !==
+                        newStudioImageUrl
+                ) {
+
+                    await removeAboutImageByUrl(
+                        currentStudioImageUrl
+                    );
+                }
+
+                currentStudioImageUrl =
+                    newStudioImageUrl;
+
+                aboutStudioImage.value =
+                    "";
+
+                renderStudioPreview(
+                    currentStudioImageUrl
+                );
+
+                aboutSettingsMessage.textContent =
+                    "About settings updated successfully!";
+
+            } catch (error) {
+
+                console.error(
+                    "About settings error:",
+                    error
+                );
+
+                aboutSettingsMessage.textContent =
+                    "Something went wrong while saving.";
+
+            } finally {
+
+                aboutSettingsSaveBtn.disabled =
+                    false;
+
+                aboutSettingsSaveBtn.innerHTML = `
+                    <i class="fas fa-floppy-disk"></i>
+                    Save About Settings
+                `;
+            }
+        }
+    );
+}
+
+
+// =====================================
+// LOAD TEAM MEMBERS
+// =====================================
+
+async function loadTeamMembers() {
+
+    if (!adminTeamGrid) return;
+
+    const { data, error } =
+        await supabase
+            .from("team_members")
+            .select("*")
+            .order(
+                "display_order",
+                {
+                    ascending: true
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Load team members error:",
+            error
+        );
+
+        adminTeamGrid.innerHTML =
+            "<p>Unable to load team members.</p>";
+
+        return;
+    }
+
+    adminTeamGrid.innerHTML = "";
+
+    if (!data || data.length === 0) {
+
+        adminTeamGrid.innerHTML =
+            "<p>No team members added yet.</p>";
+
+        return;
+    }
+
+    data.forEach((member) => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "admin-team-card";
+
+        card.innerHTML = `
+            <img
+                src="${member.image_url || ""}"
+                alt="${member.name}"
+                style="
+                    width:100%;
+                    height:220px;
+                    object-fit:cover;
+                    border-radius:14px;
+                    margin-bottom:16px;
+                    background:#eee;
+                ">
+
+            <h3>
+                ${member.name}
+            </h3>
+
+            <p>
+                <strong>
+                    ${member.role}
+                </strong>
+            </p>
+
+            <p>
+                ${member.description}
+            </p>
+
+            <p>
+                Display Order:
+                ${member.display_order}
+            </p>
+
+            <div class="admin-service-actions">
+
+                <button
+                    class="edit-team-btn"
+                    data-id="${member.id}">
+                    Edit
+                </button>
+
+                <button
+                    class="delete-team-btn"
+                    data-id="${member.id}">
+                    Delete
+                </button>
+
+            </div>
+        `;
+
+        adminTeamGrid.appendChild(
+            card
+        );
+    });
+
+    addTeamMemberButtonEvents(
+        data
+    );
+}
+
+
+// =====================================
+// ADD / UPDATE TEAM MEMBER
+// =====================================
+
+if (teamMemberForm) {
+
+    teamMemberForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+            const id =
+                teamMemberId.value;
+
+            const selectedImage =
+                teamMemberImage.files[0];
+
+            const oldImageUrl =
+                teamMemberOldImageUrl.value;
+
+            if (!id && !selectedImage) {
+
+                teamMemberMessage.textContent =
+                    "Please select a team member photo.";
+
+                return;
+            }
+
+            if (selectedImage) {
+
+                const validationError =
+                    validateAboutImage(
+                        selectedImage
+                    );
+
+                if (validationError) {
+
+                    teamMemberMessage.textContent =
+                        validationError;
+
+                    return;
+                }
+            }
+
+            teamMemberSubmitBtn.disabled =
+                true;
+
+            teamMemberSubmitBtn.innerHTML = `
+                <i class="fas fa-spinner fa-spin"></i>
+                Saving...
+            `;
+
+            teamMemberMessage.textContent =
+                "Saving team member...";
+
+            let imageUrl =
+                oldImageUrl || "";
+
+            let uploadedNewImage =
+                false;
+
+            try {
+
+                if (selectedImage) {
+
+                    imageUrl =
+                        await uploadAboutImage(
+                            selectedImage,
+                            "team"
+                        );
+
+                    uploadedNewImage =
+                        true;
+                }
+
+                const memberData = {
+
+                    name:
+                        teamMemberName.value.trim(),
+
+                    role:
+                        teamMemberRole.value.trim(),
+
+                    description:
+                        teamMemberDescription.value.trim(),
+
+                    image_url:
+                        imageUrl,
+
+                    display_order:
+                        Number(
+                            teamMemberOrder.value
+                        )
+                };
+
+                let error;
+
+                if (id) {
+
+                    ({
+                        error
+                    } = await supabase
+                        .from("team_members")
+                        .update(memberData)
+                        .eq("id", id));
+
+                } else {
+
+                    ({
+                        error
+                    } = await supabase
+                        .from("team_members")
+                        .insert([
+                            memberData
+                        ]));
+                }
+
+                if (error) {
+
+                    console.error(
+                        "Team member save error:",
+                        error
+                    );
+
+                    if (uploadedNewImage) {
+
+                        await removeAboutImageByUrl(
+                            imageUrl
+                        );
+                    }
+
+                    teamMemberMessage.textContent =
+                        "Could not save team member.";
+
+                    return;
+                }
+
+                if (
+                    id &&
+                    uploadedNewImage &&
+                    oldImageUrl &&
+                    oldImageUrl !== imageUrl
+                ) {
+
+                    await removeAboutImageByUrl(
+                        oldImageUrl
+                    );
+                }
+
+                teamMemberMessage.textContent =
+                    id
+                        ? "Team member updated successfully!"
+                        : "Team member added successfully!";
+
+                resetTeamMemberForm();
+
+                await loadTeamMembers();
+
+            } catch (error) {
+
+                console.error(
+                    "Team member error:",
+                    error
+                );
+
+                teamMemberMessage.textContent =
+                    "Something went wrong while saving.";
+
+            } finally {
+
+                teamMemberSubmitBtn.disabled =
+                    false;
+
+                if (teamMemberId.value) {
+
+                    teamMemberSubmitBtn.textContent =
+                        "Update Team Member";
+
+                } else {
+
+                    teamMemberSubmitBtn.innerHTML = `
+                        <i class="fas fa-plus"></i>
+                        Add Team Member
+                    `;
+                }
+            }
+        }
+    );
+}
+
+
+// =====================================
+// TEAM MEMBER EDIT / DELETE
+// =====================================
+
+function addTeamMemberButtonEvents(
+    members
+) {
+
+    document.querySelectorAll(
+        ".edit-team-btn"
+    ).forEach((button) => {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                const id =
+                    button.getAttribute(
+                        "data-id"
+                    );
+
+                const member =
+                    members.find(
+                        item =>
+                            String(item.id) === id
+                    );
+
+                if (!member) return;
+
+                teamMemberId.value =
+                    member.id;
+
+                teamMemberOldImageUrl.value =
+                    member.image_url || "";
+
+                teamMemberName.value =
+                    member.name || "";
+
+                teamMemberRole.value =
+                    member.role || "";
+
+                teamMemberDescription.value =
+                    member.description || "";
+
+                teamMemberOrder.value =
+                    member.display_order || 1;
+
+                teamMemberImage.value =
+                    "";
+
+                teamMemberSubmitBtn.textContent =
+                    "Update Team Member";
+
+                cancelTeamMemberEdit.style.display =
+                    "inline-block";
+
+                teamMemberForm.scrollIntoView({
+                    behavior: "smooth"
+                });
+            }
+        );
+    });
+
+
+    document.querySelectorAll(
+        ".delete-team-btn"
+    ).forEach((button) => {
+
+        button.addEventListener(
+            "click",
+            async function () {
+
+                const id =
+                    button.getAttribute(
+                        "data-id"
+                    );
+
+                const member =
+                    members.find(
+                        item =>
+                            String(item.id) === id
+                    );
+
+                if (!member) return;
+
+                if (!confirm(
+                    "Are you sure you want to delete this team member?"
+                )) {
+                    return;
+                }
+
+                const { error } =
+                    await supabase
+                        .from("team_members")
+                        .delete()
+                        .eq("id", id);
+
+                if (error) {
+
+                    console.error(
+                        "Delete team member error:",
+                        error
+                    );
+
+                    return;
+                }
+
+                if (member.image_url) {
+
+                    await removeAboutImageByUrl(
+                        member.image_url
+                    );
+                }
+
+                resetTeamMemberForm();
+
+                await loadTeamMembers();
+            }
+        );
+    });
+}
+
+
+// =====================================
+// CANCEL TEAM EDIT
+// =====================================
+
+if (cancelTeamMemberEdit) {
+
+    cancelTeamMemberEdit.addEventListener(
+        "click",
+        resetTeamMemberForm
+    );
+}
+
+
+// =====================================
+// RESET TEAM FORM
+// =====================================
+
+function resetTeamMemberForm() {
+
+    if (!teamMemberForm) return;
+
+    teamMemberForm.reset();
+
+    teamMemberId.value =
+        "";
+
+    teamMemberOldImageUrl.value =
+        "";
+
+    teamMemberOrder.value =
+        "1";
+
+    teamMemberSubmitBtn.innerHTML = `
+        <i class="fas fa-plus"></i>
+        Add Team Member
+    `;
+
+    cancelTeamMemberEdit.style.display =
+        "none";
 }
 
 
@@ -1285,7 +2176,6 @@ const adminSections =
         ".admin-section"
     );
 
-
 adminNavLinks.forEach((link) => {
 
     link.addEventListener(
@@ -1294,56 +2184,44 @@ adminNavLinks.forEach((link) => {
 
             event.preventDefault();
 
-
             const sectionId =
                 this.getAttribute(
                     "data-section"
                 );
 
-
             adminNavLinks.forEach(
-                (nav) => {
-
+                nav => {
                     nav.classList.remove(
                         "active"
                     );
-
                 }
             );
 
-
             adminSections.forEach(
-                (section) => {
-
+                section => {
                     section.classList.remove(
                         "active"
                     );
-
                 }
             );
-
 
             this.classList.add(
                 "active"
             );
-
 
             const selectedSection =
                 document.getElementById(
                     sectionId
                 );
 
-
             if (selectedSection) {
 
                 selectedSection.classList.add(
                     "active"
                 );
-
             }
         }
     );
-
 });
 
 
@@ -1359,10 +2237,8 @@ if (logoutBtn) {
 
             await supabase.auth.signOut();
 
-
             window.location.href =
                 "admin-login.html";
-
         }
     );
 }
@@ -1379,3 +2255,7 @@ loadServices();
 loadPricing();
 
 loadSiteSettings();
+
+loadAboutSettings();
+
+loadTeamMembers();

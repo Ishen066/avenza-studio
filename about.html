@@ -41,6 +41,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
 </nav>
 
+
 <!-- Header -->
 
 <section class="page-header">
@@ -53,32 +54,37 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
 </section>
 
-<!-- Story Section -->
+
+<!-- Dynamic Story Section -->
 
 <section class="about-story">
 
     <div class="story-image">
-        <img src="images/about.jpg" alt="Studio">
+
+        <img
+            id="aboutStudioImage"
+            src="images/about.jpg"
+            alt="Avenza Studio">
+
     </div>
 
     <div class="story-content">
 
-        <h2>Our Story</h2>
+        <h2 id="aboutStoryTitle">
+            Our Story
+        </h2>
 
-        <p>
-            Avenza Studio was founded with a passion for preserving
-            life’s most valuable memories through professional
-            photography and premium framing solutions.
+        <p id="aboutStoryText1">
+            Loading our story...
         </p>
 
-        <p>
-            From weddings and graduations to family portraits and
-            special events, we transform moments into timeless memories.
+        <p id="aboutStoryText2">
         </p>
 
     </div>
 
 </section>
+
 
 <!-- Mission & Vision -->
 
@@ -111,6 +117,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
     </div>
 
 </section>
+
 
 <!-- Why Choose Us -->
 
@@ -164,6 +171,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
 </section>
 
+
 <!-- Statistics -->
 
 <section class="stats-section">
@@ -202,59 +210,35 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
 </section>
 
-<!-- Team -->
+
+<!-- Dynamic Team -->
 
 <section class="team-section">
 
     <h2>Meet Our Team</h2>
 
-    <div class="team-grid">
+    <div
+        class="team-grid"
+        id="teamGrid">
 
-        <div class="team-card">
+        <p>
+            Loading team members...
+        </p>
 
-            <img src="images/team1.jpg">
-
-            <h3>Lead Photographer</h3>
-
-            <p>
-                Expert in wedding and portrait photography.
-            </p>
-
-        </div>
-
-        <div class="team-card">
-
-            <img src="images/team2.jpg">
-
-            <h3>Photo Editor</h3>
-
-            <p>
-                Professional retouching and creative editing.
-            </p>
-
-        </div>
-
-        <div class="team-card">
-
-            <img src="images/team3.jpg">
-
-            <h3>Creative Designer</h3>
-
-            <p>
-                Premium framing and design specialist.
-            </p>
-
-        </div>
+        <!-- Supabase team members appear here -->
 
     </div>
 
 </section>
 
+
 <!-- CTA -->
 
 <section class="cta">
 
-    <h2>Let's Create Beautiful Memories</h2>
+    <h2>
+        Let's Create Beautiful Memories
+    </h2>
 
     <p>
         Explore our gallery and discover our work.
@@ -265,6 +249,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
     </a>
 
 </section>
+
 
 <!-- Footer -->
 
@@ -306,23 +291,39 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
     <p>
         Email:
-        <span id="footerEmail">Loading...</span>
+        <span id="footerEmail">
+            Loading...
+        </span>
     </p>
 
     <p>
         Phone:
-        <span id="footerPhone">Loading...</span>
+        <span id="footerPhone">
+            Loading...
+        </span>
     </p>
 
     <p>
-        © 2026 Avenza Studio. All Rights Reserved.
+        © 2026 Avenza Studio.
+        All Rights Reserved.
     </p>
 
 </footer>
 
+
 <script src="js/script.js"></script>
-<script type="module" src="js/site-settings.js"></script>
+
+<script
+    type="module"
+    src="js/about.js">
+</script>
+
+<script
+    type="module"
+    src="js/site-settings.js">
+</script>
 
 
 </body>
+
 </html>

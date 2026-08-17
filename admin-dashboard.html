@@ -45,6 +45,13 @@
 
             <a href="#"
                class="admin-nav-link"
+               data-section="aboutManagement">
+                <i class="fas fa-users"></i>
+                About
+            </a>
+
+            <a href="#"
+               class="admin-nav-link"
                data-section="settingsManagement">
                 <i class="fas fa-gear"></i>
                 Site Settings
@@ -96,10 +103,16 @@
                     <input
                         type="file"
                         id="photoFile"
-                        accept="image/*"
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                         required>
 
-                    <button type="submit">
+                    <small class="upload-help">
+                        JPG, PNG or WEBP only. Maximum file size: 5 MB.
+                    </small>
+
+                    <button
+                        type="submit"
+                        id="galleryUploadBtn">
                         <i class="fas fa-cloud-arrow-up"></i>
                         Upload Photo
                     </button>
@@ -258,6 +271,111 @@
             </div>
 
             <div id="adminPricingGrid" class="admin-pricing-grid"></div>
+
+        </section>
+
+
+        <section id="aboutManagement" class="admin-section">
+
+            <h2>About Management</h2>
+
+            <div class="upload-card">
+
+                <h3 style="margin-bottom:18px;">Studio & Story</h3>
+
+                <form id="aboutSettingsForm">
+
+                    <label>Story Title</label>
+                    <input type="text" id="aboutStoryTitle" placeholder="Our Story" required>
+
+                    <label>Story Paragraph 1</label>
+                    <textarea id="aboutStoryText1" placeholder="Enter the first story paragraph" required></textarea>
+
+                    <label>Story Paragraph 2</label>
+                    <textarea id="aboutStoryText2" placeholder="Enter the second story paragraph" required></textarea>
+
+                    <label>Current Studio Photo</label>
+                    <div id="aboutStudioPreview" class="about-admin-image-preview">
+                        <p>No studio image available.</p>
+                    </div>
+
+                    <label>Change Studio Photo</label>
+                    <input
+                        type="file"
+                        id="aboutStudioImage"
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+
+                    <small class="upload-help">
+                        JPG, PNG or WEBP only. Maximum file size: 5 MB.
+                    </small>
+
+                    <button type="submit" id="aboutSettingsSaveBtn">
+                        <i class="fas fa-floppy-disk"></i>
+                        Save About Settings
+                    </button>
+
+                </form>
+
+                <p id="aboutSettingsMessage"></p>
+
+            </div>
+
+            <div class="upload-card">
+
+                <h3 style="margin-bottom:18px;">Team Members</h3>
+
+                <form id="teamMemberForm">
+
+                    <input type="hidden" id="teamMemberId">
+                    <input type="hidden" id="teamMemberOldImageUrl">
+
+                    <label>Member Name</label>
+                    <input type="text" id="teamMemberName" placeholder="Member name" required>
+
+                    <label>Role</label>
+                    <input type="text" id="teamMemberRole" placeholder="Lead Photographer" required>
+
+                    <label>Description</label>
+                    <textarea id="teamMemberDescription" placeholder="Short team member description" required></textarea>
+
+                    <label>Display Order</label>
+                    <input type="number" id="teamMemberOrder" min="1" value="1" required>
+
+                    <label>Member Photo</label>
+                    <input
+                        type="file"
+                        id="teamMemberImage"
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+
+                    <small class="upload-help">
+                        JPG, PNG or WEBP only. Maximum file size: 5 MB.
+                        A photo is required when adding a new member.
+                    </small>
+
+                    <div class="service-form-buttons">
+
+                        <button type="submit" id="teamMemberSubmitBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Team Member
+                        </button>
+
+                        <button type="button" id="cancelTeamMemberEdit" style="display:none;">
+                            Cancel Edit
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <p id="teamMemberMessage"></p>
+
+            </div>
+
+            <div class="admin-gallery-header">
+                <h2>Current Team</h2>
+            </div>
+
+            <div id="adminTeamGrid" class="admin-team-grid"></div>
 
         </section>
 
