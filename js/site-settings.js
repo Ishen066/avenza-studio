@@ -23,7 +23,9 @@ async function loadSiteSettings() {
     }
 
 
-    // Contact information
+    // =====================================
+    // CONTACT INFORMATION
+    // =====================================
 
     const sitePhone =
         document.getElementById("sitePhone");
@@ -61,7 +63,9 @@ async function loadSiteSettings() {
     }
 
 
-    // Social links
+    // =====================================
+    // MAIN SOCIAL LINKS
+    // =====================================
 
     const siteFacebook =
         document.getElementById(
@@ -73,9 +77,9 @@ async function loadSiteSettings() {
             "siteInstagram"
         );
 
-    const siteYoutube =
+    const siteTiktok =
         document.getElementById(
-            "siteYoutube"
+            "siteTiktok"
         );
 
     const siteWhatsapp =
@@ -94,15 +98,19 @@ async function loadSiteSettings() {
             data.instagram_url || "#";
     }
 
-    if (siteYoutube) {
-        siteYoutube.href =
-            data.youtube_url || "#";
+    if (siteTiktok) {
+        siteTiktok.href =
+            data.tiktok_url || "#";
     }
 
 
+    // =====================================
+    // WHATSAPP
+    // =====================================
+
     const whatsappNumber =
         (data.whatsapp_number || "")
-        .replace(/\D/g, "");
+            .replace(/\D/g, "");
 
 
     if (
@@ -112,11 +120,12 @@ async function loadSiteSettings() {
 
         siteWhatsapp.href =
             `https://wa.me/${whatsappNumber}`;
-
     }
 
 
-    // Floating WhatsApp
+    // =====================================
+    // FLOATING WHATSAPP
+    // =====================================
 
     const floatingWhatsapp =
         document.getElementById(
@@ -131,11 +140,53 @@ async function loadSiteSettings() {
 
         floatingWhatsapp.href =
             `https://wa.me/${whatsappNumber}`;
-
     }
 
 
-    // Footer
+    // =====================================
+    // CALL BUTTON
+    // =====================================
+
+    const callNowBtn =
+        document.getElementById(
+            "callNowBtn"
+        );
+
+    if (callNowBtn) {
+
+        const telPhone =
+            (data.phone || "")
+                .replace(/[^\d+]/g, "");
+
+        if (telPhone) {
+            callNowBtn.href =
+                `tel:${telPhone}`;
+        }
+    }
+
+
+    // =====================================
+    // EMAIL BUTTON
+    // =====================================
+
+    const emailNowBtn =
+        document.getElementById(
+            "emailNowBtn"
+        );
+
+    if (
+        emailNowBtn &&
+        data.email
+    ) {
+
+        emailNowBtn.href =
+            `mailto:${data.email}`;
+    }
+
+
+    // =====================================
+    // FOOTER INFORMATION
+    // =====================================
 
     const footerEmail =
         document.getElementById(
@@ -156,6 +207,56 @@ async function loadSiteSettings() {
     if (footerPhone) {
         footerPhone.textContent =
             data.phone || "";
+    }
+
+
+    // =====================================
+    // FOOTER SOCIAL LINKS
+    // =====================================
+
+    const footerFacebook =
+        document.getElementById(
+            "footerFacebook"
+        );
+
+    const footerInstagram =
+        document.getElementById(
+            "footerInstagram"
+        );
+
+    const footerTiktok =
+        document.getElementById(
+            "footerTiktok"
+        );
+
+    const footerWhatsapp =
+        document.getElementById(
+            "footerWhatsapp"
+        );
+
+
+    if (footerFacebook) {
+        footerFacebook.href =
+            data.facebook_url || "#";
+    }
+
+    if (footerInstagram) {
+        footerInstagram.href =
+            data.instagram_url || "#";
+    }
+
+    if (footerTiktok) {
+        footerTiktok.href =
+            data.tiktok_url || "#";
+    }
+
+    if (
+        footerWhatsapp &&
+        whatsappNumber
+    ) {
+
+        footerWhatsapp.href =
+            `https://wa.me/${whatsappNumber}`;
     }
 
 }

@@ -1028,8 +1028,11 @@ const settingsFacebook =
 const settingsInstagram =
     document.getElementById("settingsInstagram");
 
-const settingsYoutube =
-    document.getElementById("settingsYoutube");
+
+// TIKTOK
+const settingsTiktok =
+    document.getElementById("settingsTiktok");
+
 
 const settingsWhatsapp =
     document.getElementById("settingsWhatsapp");
@@ -1097,8 +1100,11 @@ async function loadSiteSettings() {
     settingsInstagram.value =
         data.instagram_url || "";
 
-    settingsYoutube.value =
-        data.youtube_url || "";
+
+    // TIKTOK
+    settingsTiktok.value =
+        data.tiktok_url || "";
+
 
     settingsWhatsapp.value =
         data.whatsapp_number || "";
@@ -1148,8 +1154,11 @@ if (settingsForm) {
                 instagram_url:
                     settingsInstagram.value.trim(),
 
-                youtube_url:
-                    settingsYoutube.value.trim(),
+
+                // TIKTOK
+                tiktok_url:
+                    settingsTiktok.value.trim(),
+
 
                 whatsapp_number:
                     settingsWhatsapp.value.trim()
@@ -2249,13 +2258,8 @@ if (logoutBtn) {
 // =====================================
 
 loadGallery();
-
 loadServices();
-
 loadPricing();
-
 loadSiteSettings();
-
 loadAboutSettings();
-
 loadTeamMembers();
