@@ -4375,3 +4375,615 @@ footer h3{
 .admin-brand-content h1{
     font-family: "Times New Roman", Times, serif !important;
 }
+/* =========================================
+   MOBILE NAVIGATION - LEFT ALIGN FIX
+========================================= */
+
+@media(max-width:768px){
+
+    .navbar{
+        align-items:flex-start;
+    }
+
+    .nav-links{
+        display:none;
+        width:100%;
+
+        flex-direction:column;
+        align-items:flex-start;
+
+        margin-top:15px;
+        padding:15px 0;
+
+        background:var(--secondary);
+        border:1px solid var(--border);
+        border-radius:15px;
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .nav-links li{
+        width:100%;
+        margin:3px 0;
+        text-align:left;
+    }
+
+    .nav-links a{
+        display:block;
+        width:100%;
+
+        padding:12px 20px;
+
+        text-align:left;
+    }
+}
+/* =========================================
+   MOBILE SIDE DRAWER NAVIGATION
+========================================= */
+
+@media(max-width:768px){
+
+    .navbar{
+        position:sticky;
+        top:0;
+        flex-direction:row;
+        align-items:center;
+        justify-content:space-between;
+        padding:12px 18px;
+    }
+
+    .menu-toggle{
+        display:block;
+        position:relative;
+        z-index:2002;
+        font-size:28px;
+        color:#ffffff;
+    }
+
+    .nav-links{
+        position:fixed;
+
+        top:0;
+        left:-290px;
+
+        width:280px;
+        height:100vh;
+
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+
+        padding:110px 20px 30px;
+        margin:0;
+
+        background:#522f0f;
+
+        border:none;
+        border-radius:0;
+
+        box-shadow:
+            15px 0 35px
+            rgba(0,0,0,0.35);
+
+        transition:left 0.35s ease;
+
+        z-index:2000;
+    }
+
+    .nav-links.active{
+        left:0;
+    }
+
+    .nav-links li{
+        width:100%;
+        margin:4px 0;
+        text-align:left;
+    }
+
+    .nav-links a{
+        display:block;
+        width:100%;
+
+        padding:13px 16px;
+
+        text-align:left;
+
+        border-radius:10px;
+
+        font-size:17px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active{
+        background:rgba(255,255,255,0.12);
+        color:#ffffff !important;
+    }
+
+    .nav-links a::after{
+        display:none;
+    }
+}
+/* =========================================
+   MOBILE SIDE DRAWER + OVERLAY
+========================================= */
+
+.mobile-nav-overlay{
+    display:none;
+}
+
+@media(max-width:768px){
+
+    .navbar{
+        position:sticky;
+        top:0;
+
+        flex-direction:row;
+        align-items:center;
+        justify-content:space-between;
+
+        padding:12px 18px;
+
+        z-index:3000;
+    }
+
+    .menu-toggle{
+        display:block;
+
+        position:relative;
+        z-index:3200;
+
+        font-size:28px;
+        color:#ffffff;
+
+        cursor:pointer;
+    }
+
+    .nav-links{
+        position:fixed;
+
+        top:0;
+        left:-290px;
+
+        width:280px;
+        height:100vh;
+
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+
+        margin:0;
+        padding:105px 18px 30px;
+
+        background:#522f0f;
+
+        border:none;
+        border-radius:0;
+
+        box-shadow:
+            15px 0 35px
+            rgba(0,0,0,0.35);
+
+        transition:left 0.35s ease;
+
+        z-index:3100;
+    }
+
+    .nav-links.active{
+        left:0;
+    }
+
+    .nav-links li{
+        width:100%;
+        margin:4px 0;
+
+        text-align:left;
+    }
+
+    .nav-links a{
+        display:block;
+
+        width:100%;
+
+        padding:14px 16px;
+
+        text-align:left;
+
+        border-radius:10px;
+
+        font-size:17px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active{
+        background:rgba(255,255,255,0.12);
+
+        color:#ffffff !important;
+    }
+
+    .nav-links a::after{
+        display:none;
+    }
+
+    .mobile-nav-overlay{
+        position:fixed;
+
+        inset:0;
+
+        display:block;
+
+        background:rgba(0,0,0,0.55);
+
+        opacity:0;
+        visibility:hidden;
+
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease;
+
+        z-index:3005;
+    }
+
+    .mobile-nav-overlay.active{
+        opacity:1;
+        visibility:visible;
+    }
+
+    body.menu-open{
+        overflow:hidden;
+    }
+}
+/* =========================================
+   MOBILE DRAWER FINAL CLICK FIX
+========================================= */
+
+@media (max-width:768px){
+
+    .navbar{
+        position:sticky !important;
+        top:0;
+        z-index:5000 !important;
+    }
+
+    .nav-links{
+        position:fixed !important;
+
+        top:0 !important;
+        left:-290px !important;
+
+        width:280px !important;
+        height:100vh !important;
+
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:stretch !important;
+
+        padding:105px 18px 30px !important;
+        margin:0 !important;
+
+        background:#522f0f !important;
+
+        border:none !important;
+        border-radius:0 !important;
+
+        z-index:6000 !important;
+
+        transition:left 0.35s ease !important;
+
+        pointer-events:auto !important;
+    }
+
+    .nav-links.active{
+        left:0 !important;
+    }
+
+    .nav-links li{
+        position:relative;
+        z-index:6001;
+
+        width:100% !important;
+        margin:4px 0 !important;
+
+        pointer-events:auto !important;
+    }
+
+    .nav-links li a{
+        position:relative;
+        z-index:6002;
+
+        display:block !important;
+
+        width:100% !important;
+        padding:14px 16px !important;
+
+        text-align:left !important;
+
+        color:#ffffff !important;
+
+        pointer-events:auto !important;
+        cursor:pointer !important;
+    }
+
+    .mobile-nav-overlay{
+        position:fixed !important;
+        inset:0 !important;
+
+        background:rgba(0,0,0,0.55);
+
+        z-index:5500 !important;
+
+        opacity:0;
+        visibility:hidden;
+
+        pointer-events:none;
+
+        transition:0.3s ease;
+    }
+
+    .mobile-nav-overlay.active{
+        opacity:1;
+        visibility:visible;
+
+        pointer-events:auto;
+    }
+}
+/* =========================================
+   FINAL MOBILE DRAWER CLICK FIX
+========================================= */
+
+@media (max-width:768px){
+
+    .navbar{
+        position:sticky !important;
+        top:0 !important;
+        z-index:10000 !important;
+        flex-direction:row !important;
+        align-items:center !important;
+        justify-content:space-between !important;
+    }
+
+    .nav-links{
+        position:fixed !important;
+        top:0 !important;
+        left:-290px !important;
+
+        width:280px !important;
+        height:100vh !important;
+
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:stretch !important;
+
+        padding:105px 18px 30px !important;
+        margin:0 !important;
+
+        background:#522f0f !important;
+        border:none !important;
+        border-radius:0 !important;
+
+        z-index:12000 !important;
+
+        transition:left 0.35s ease !important;
+
+        pointer-events:auto !important;
+    }
+
+    .nav-links.active{
+        left:0 !important;
+    }
+
+    .nav-links li{
+        width:100% !important;
+        margin:4px 0 !important;
+
+        position:relative !important;
+        z-index:12001 !important;
+
+        pointer-events:auto !important;
+    }
+
+    .nav-links li a{
+        display:block !important;
+        width:100% !important;
+
+        padding:14px 16px !important;
+
+        color:#ffffff !important;
+        text-align:left !important;
+        text-decoration:none !important;
+
+        position:relative !important;
+        z-index:12002 !important;
+
+        pointer-events:auto !important;
+        cursor:pointer !important;
+    }
+
+    .mobile-nav-overlay{
+        position:fixed !important;
+        inset:0 !important;
+
+        background:rgba(0,0,0,0.55) !important;
+
+        z-index:11000 !important;
+
+        opacity:0 !important;
+        visibility:hidden !important;
+
+        pointer-events:none !important;
+
+        transition:0.3s ease !important;
+    }
+
+    .mobile-nav-overlay.active{
+        opacity:1 !important;
+        visibility:visible !important;
+
+        pointer-events:auto !important;
+    }
+
+    .menu-toggle{
+        position:relative !important;
+        z-index:13000 !important;
+    }
+}
+/* =========================================
+   FINAL MOBILE MENU Z-INDEX FIX
+========================================= */
+
+@media (max-width:768px){
+
+    .navbar{
+        position:sticky !important;
+        top:0 !important;
+
+        z-index:12000 !important;
+
+        flex-direction:row !important;
+        align-items:center !important;
+        justify-content:space-between !important;
+    }
+
+
+    /* SIDE DRAWER */
+
+    .nav-links{
+        position:fixed !important;
+
+        top:0 !important;
+        left:-290px !important;
+
+        width:280px !important;
+        height:100vh !important;
+
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:stretch !important;
+
+        margin:0 !important;
+
+        padding:
+            105px
+            18px
+            30px !important;
+
+        background:#522f0f !important;
+
+        border:none !important;
+        border-radius:0 !important;
+
+        transition:
+            left 0.35s ease !important;
+
+        /*
+        Important:
+        navbar itself is already above overlay.
+        */
+        z-index:12001 !important;
+    }
+
+
+    .nav-links.active{
+        left:0 !important;
+    }
+
+
+    /* MENU ITEMS */
+
+    .nav-links li{
+        width:100% !important;
+
+        margin:4px 0 !important;
+
+        text-align:left !important;
+    }
+
+
+    .nav-links li a{
+        display:block !important;
+
+        width:100% !important;
+
+        padding:
+            14px
+            16px !important;
+
+        color:#ffffff !important;
+
+        text-align:left !important;
+
+        text-decoration:none !important;
+
+        border-radius:10px !important;
+
+        cursor:pointer !important;
+
+        pointer-events:auto !important;
+    }
+
+
+    .nav-links li a:hover,
+    .nav-links li a.active{
+        background:
+            rgba(255,255,255,0.12) !important;
+    }
+
+
+    /* Remove desktop underline */
+
+    .nav-links a::after{
+        display:none !important;
+    }
+
+
+    /* HAMBURGER / CLOSE BUTTON */
+
+    .menu-toggle{
+        position:relative !important;
+
+        z-index:12002 !important;
+
+        cursor:pointer !important;
+    }
+
+
+    /* DARK BACKGROUND */
+
+    .mobile-nav-overlay{
+        position:fixed !important;
+
+        inset:0 !important;
+
+        background:
+            rgba(0,0,0,0.58) !important;
+
+        /*
+        MUST be below navbar/drawer
+        */
+        z-index:11000 !important;
+
+        opacity:0 !important;
+        visibility:hidden !important;
+
+        pointer-events:none !important;
+
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease !important;
+    }
+
+
+    .mobile-nav-overlay.active{
+        opacity:1 !important;
+        visibility:visible !important;
+
+        pointer-events:auto !important;
+    }
+
+
+    body.menu-open{
+        overflow:hidden;
+    }
+
+}
