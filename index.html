@@ -1,17 +1,40 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avenza Studio | Photography & Framing</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Avenza Studio | Photography & Framing
+    </title>
 
 
-<link rel="stylesheet" href="css/style.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="css/style.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+
+    <!-- Sandagomi Photography Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap"
+        rel="stylesheet">
 
 </head>
 
@@ -19,81 +42,160 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 <body>
 
 
-<!-- Navbar -->
+<!-- =====================================
+     NAVBAR
+===================================== -->
 
 <nav class="navbar">
 
     <div class="logo">
-         <img src="images/logo.png" alt="Avenza Studio Logo">
-          <span>AVENZA STUDIO</span>
+
+        <img src="images/logo.png"
+             alt="Avenza Studio Logo">
+
+        <span>
+            AVENZA STUDIO
+        </span>
+
     </div>
-    
-    <div class="menu-toggle" id="menu-toggle">
-    <i class="fas fa-bars"></i>
-</div>
+
+
+    <div class="menu-toggle"
+         id="menu-toggle">
+
+        <i class="fas fa-bars"></i>
+
+    </div>
+
 
     <ul class="nav-links">
 
-        <li><a href="index.html" class="active">Home</a></li>
+        <li>
+            <a href="index.html"
+               class="active">
+                Home
+            </a>
+        </li>
 
-        <li><a href="about.html">About</a></li>
+        <li>
+            <a href="about.html">
+                About
+            </a>
+        </li>
 
-        <li><a href="services.html">Services</a></li>
+        <li>
+            <a href="services.html">
+                Services
+            </a>
+        </li>
 
-        <li><a href="gallery.html">Gallery</a></li>
+        <li>
+            <a href="gallery.html">
+                Gallery
+            </a>
+        </li>
 
-        <li><a href="pricing.html">Pricing</a></li>
+        <li>
+            <a href="pricing.html">
+                Pricing
+            </a>
+        </li>
 
-        <li><a href="contact.html">Contact</a></li>
+        <li>
+            <a href="contact.html">
+                Contact
+            </a>
+        </li>
 
     </ul>
 
 </nav>
-<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 
-<!-- Hero Section -->
+
+<div class="mobile-nav-overlay"
+     id="mobileNavOverlay">
+</div>
+
+
+
+<!-- =====================================
+     HERO SECTION
+===================================== -->
 
 <section class="hero">
 
-    <img src="images/hero1.jpg" class="hero-slide active">
-    <img src="images/hero2.jpg" class="hero-slide">
-    <img src="images/hero3.jpg" class="hero-slide">
+    <img src="images/hero1.jpg"
+         class="hero-slide active"
+         alt="Avenza Studio Photography">
+
+    <img src="images/hero2.jpg"
+         class="hero-slide"
+         alt="Avenza Studio Photography">
+
+    <img src="images/hero3.jpg"
+         class="hero-slide"
+         alt="Avenza Studio Photography">
+
 
     <div class="hero-overlay"></div>
+
 
     <div class="hero-content">
 
         <h1>
-            Capturing Moments,<br>
-            Framing Memories
+            AVENZA STUDIO
         </h1>
 
-        <p>
-            Professional Photography, Custom Framing &
-            Premium Photo Printing Services
-        </p>
 
-        <a href="gallery.html" class="btn">
+        <!-- Sandagomi Photography -->
+
+        <div class="sandagomi-brand">
+
+            <span class="brand-name">
+                SANDAGOMI
+            </span>
+
+            <span class="brand-type">
+                PHOTOGRAPHY
+            </span>
+
+        </div>
+
+
+        <a href="gallery.html"
+           class="btn">
+
             View Our Gallery
+
         </a>
 
     </div>
 
 </section>
 
-<!-- Services -->
+
+
+<!-- =====================================
+     SERVICES
+===================================== -->
 
 <section class="services">
 
-    <h2>Our Services</h2>
+    <h2>
+        Our Services
+    </h2>
+
 
     <div class="service-grid">
+
 
         <div class="service-card">
 
             <i class="fas fa-camera"></i>
 
-            <h3>Wedding Photography</h3>
+            <h3>
+                Wedding Photography
+            </h3>
 
             <p>
                 Capture every unforgettable moment
@@ -102,11 +204,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
         </div>
 
+
         <div class="service-card">
 
             <i class="fas fa-user"></i>
 
-            <h3>Portrait Photography</h3>
+            <h3>
+                Portrait Photography
+            </h3>
 
             <p>
                 Professional portraits for individuals,
@@ -115,11 +220,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
         </div>
 
+
         <div class="service-card">
 
             <i class="fas fa-calendar"></i>
 
-            <h3>Event Coverage</h3>
+            <h3>
+                Event Coverage
+            </h3>
 
             <p>
                 Birthday parties, corporate events
@@ -128,15 +236,23 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
         </div>
 
+
     </div>
 
 </section>
 
-<!-- Gallery Preview -->
+
+
+<!-- =====================================
+     GALLERY PREVIEW
+===================================== -->
 
 <section class="gallery-preview">
 
-    <h2>Featured Gallery</h2>
+    <h2>
+        Featured Gallery
+    </h2>
+
 
     <div class="gallery-grid">
 
@@ -156,55 +272,109 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
 </section>
 
-<!-- Why Choose Us -->
+
+
+<!-- =====================================
+     WHY CHOOSE US
+===================================== -->
 
 <section class="why-us">
 
-    <h2>Why Choose Avenza Studio</h2>
+    <h2>
+        Why Choose Avenza Studio
+    </h2>
+
 
     <div class="why-grid">
 
-        <div class="why-card">
-            <h3>Professional Equipment</h3>
-            <p>Latest cameras and studio lighting.</p>
-        </div>
 
         <div class="why-card">
-            <h3>Experienced Team</h3>
-            <p>Skilled photographers and editors.</p>
+
+            <h3>
+                Professional Equipment
+            </h3>
+
+            <p>
+                Latest cameras and studio lighting.
+            </p>
+
         </div>
 
-        <div class="why-card">
-            <h3>Premium Quality</h3>
-            <p>High-quality printing and framing.</p>
-        </div>
 
         <div class="why-card">
-            <h3>Affordable Packages</h3>
-            <p>Services for every budget.</p>
+
+            <h3>
+                Experienced Team
+            </h3>
+
+            <p>
+                Skilled photographers and editors.
+            </p>
+
         </div>
+
+
+        <div class="why-card">
+
+            <h3>
+                Premium Quality
+            </h3>
+
+            <p>
+                High-quality printing and framing.
+            </p>
+
+        </div>
+
+
+        <div class="why-card">
+
+            <h3>
+                Affordable Packages
+            </h3>
+
+            <p>
+                Services for every budget.
+            </p>
+
+        </div>
+
 
     </div>
 
 </section>
 
-<!-- CTA -->
+
+
+<!-- =====================================
+     CTA
+===================================== -->
 
 <section class="cta">
 
-    <h2>Ready To Capture Your Story?</h2>
+    <h2>
+        Ready To Capture Your Story?
+    </h2>
 
     <p>
-        Contact us today and book your next photo session.
+        Contact us today and book your next
+        photo session.
     </p>
 
-    <a href="contact.html" class="btn">
+    <a href="contact.html"
+       class="btn">
+
         Contact Now
+
     </a>
 
 </section>
 
-<!-- WHATSAPP -->
+
+
+<!-- =====================================
+     FLOATING WHATSAPP
+===================================== -->
 
 <a href="https://wa.me/94772687814"
    class="whatsapp-btn"
@@ -215,64 +385,107 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
 
 </a>
 
-<!-- Footer -->
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
 
 <footer>
 
-    <h3>Avenza Studio</h3>
+    <h3>
+        Avenza Studio
+    </h3>
 
     <p>
         Capturing Moments, Framing Memories
     </p>
 
+
     <div class="social-links">
+
 
         <a id="footerFacebook"
            href="#"
-           target="_blank">
+           target="_blank"
+           aria-label="Facebook">
+
             <i class="fab fa-facebook"></i>
+
         </a>
+
 
         <a id="footerInstagram"
            href="#"
-           target="_blank">
+           target="_blank"
+           aria-label="Instagram">
+
             <i class="fab fa-instagram"></i>
+
         </a>
-<a id="footerTiktok"
-   href="#"
-   target="_blank"
-   aria-label="TikTok">
 
-    <i class="fab fa-tiktok"></i>
 
-</a>
+        <a id="footerTiktok"
+           href="#"
+           target="_blank"
+           aria-label="TikTok">
+
+            <i class="fab fa-tiktok"></i>
+
+        </a>
+
 
         <a id="footerWhatsapp"
            href="#"
-           target="_blank">
+           target="_blank"
+           aria-label="WhatsApp">
+
             <i class="fab fa-whatsapp"></i>
+
         </a>
+
 
     </div>
 
+
     <p>
+
         Email:
-        <span id="footerEmail">Loading...</span>
+
+        <span id="footerEmail">
+            Loading...
+        </span>
+
     </p>
 
+
     <p>
+
         Phone:
-        <span id="footerPhone">Loading...</span>
+
+        <span id="footerPhone">
+            Loading...
+        </span>
+
     </p>
 
+
     <p>
-        © 2026 Avenza Studio. All Rights Reserved.
+        © 2026 Avenza Studio.
+        All Rights Reserved.
     </p>
 
 </footer>
 
+
+
 <script src="js/script.js"></script>
-<script type="module" src="js/site-settings.js"></script>
+
+<script type="module"
+        src="js/site-settings.js">
+</script>
+
 
 </body>
+
 </html>
