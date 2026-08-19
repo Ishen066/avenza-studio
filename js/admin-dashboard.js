@@ -59,7 +59,10 @@ async function loadGallery() {
         });
 
     if (error) {
-        console.error("Load gallery error:", error);
+        console.error(
+            "Load gallery error:",
+            error
+        );
         return;
     }
 
@@ -126,20 +129,26 @@ if (uploadForm) {
                 fileInput.files[0];
 
             if (!title) {
+
                 uploadMessage.textContent =
                     "Please enter a photo title.";
+
                 return;
             }
 
             if (!category) {
+
                 uploadMessage.textContent =
                     "Please select a category.";
+
                 return;
             }
 
             if (!file) {
+
                 uploadMessage.textContent =
                     "Please select a photo.";
+
                 return;
             }
 
@@ -180,8 +189,14 @@ if (uploadForm) {
             const cleanFileName =
                 file.name
                     .toLowerCase()
-                    .replace(/[^a-z0-9.-]/g, "-")
-                    .replace(/-+/g, "-");
+                    .replace(
+                        /[^a-z0-9.-]/g,
+                        "-"
+                    )
+                    .replace(
+                        /-+/g,
+                        "-"
+                    );
 
             const fileName =
                 `${Date.now()}-${cleanFileName}`;
@@ -192,10 +207,17 @@ if (uploadForm) {
                     error: uploadError
                 } = await supabase.storage
                     .from("gallery-images")
-                    .upload(fileName, file, {
-                        cacheControl: "3600",
-                        upsert: false
-                    });
+                    .upload(
+                        fileName,
+                        file,
+                        {
+                            cacheControl:
+                                "3600",
+
+                            upsert:
+                                false
+                        }
+                    );
 
                 if (uploadError) {
 
@@ -214,7 +236,9 @@ if (uploadForm) {
                     data: publicUrlData
                 } = supabase.storage
                     .from("gallery-images")
-                    .getPublicUrl(fileName);
+                    .getPublicUrl(
+                        fileName
+                    );
 
                 const imageUrl =
                     publicUrlData.publicUrl;
@@ -225,9 +249,14 @@ if (uploadForm) {
                     .from("gallery")
                     .insert([
                         {
-                            title: title,
-                            category: category,
-                            image_url: imageUrl
+                            title:
+                                title,
+
+                            category:
+                                category,
+
+                            image_url:
+                                imageUrl
                         }
                     ]);
 
@@ -240,7 +269,9 @@ if (uploadForm) {
 
                     await supabase.storage
                         .from("gallery-images")
-                        .remove([fileName]);
+                        .remove([
+                            fileName
+                        ]);
 
                     uploadMessage.textContent =
                         "Photo details could not be saved.";
@@ -267,7 +298,9 @@ if (uploadForm) {
 
             } finally {
 
-                setGalleryUploadState(false);
+                setGalleryUploadState(
+                    false
+                );
             }
         }
     );
@@ -278,7 +311,9 @@ if (uploadForm) {
 // GALLERY BUTTON STATE
 // =====================================
 
-function setGalleryUploadState(isUploading) {
+function setGalleryUploadState(
+    isUploading
+) {
 
     if (!galleryUploadBtn) return;
 
@@ -317,10 +352,14 @@ function addDeleteEvents() {
             async function () {
 
                 const id =
-                    button.getAttribute("data-id");
+                    button.getAttribute(
+                        "data-id"
+                    );
 
                 const imageUrl =
-                    button.getAttribute("data-url");
+                    button.getAttribute(
+                        "data-url"
+                    );
 
                 if (!confirm(
                     "Are you sure you want to delete this photo?"
@@ -332,7 +371,10 @@ function addDeleteEvents() {
                     await supabase
                         .from("gallery")
                         .delete()
-                        .eq("id", id);
+                        .eq(
+                            "id",
+                            id
+                        );
 
                 if (error) {
 
@@ -352,12 +394,19 @@ function addDeleteEvents() {
                 if (fileName) {
 
                     const {
-                        error: storageDeleteError
+                        error:
+                            storageDeleteError
                     } = await supabase.storage
-                        .from("gallery-images")
-                        .remove([fileName]);
+                        .from(
+                            "gallery-images"
+                        )
+                        .remove([
+                            fileName
+                        ]);
 
-                    if (storageDeleteError) {
+                    if (
+                        storageDeleteError
+                    ) {
 
                         console.error(
                             "Storage delete error:",
@@ -378,31 +427,49 @@ function addDeleteEvents() {
 // =====================================
 
 const serviceForm =
-    document.getElementById("serviceForm");
+    document.getElementById(
+        "serviceForm"
+    );
 
 const serviceId =
-    document.getElementById("serviceId");
+    document.getElementById(
+        "serviceId"
+    );
 
 const serviceName =
-    document.getElementById("serviceName");
+    document.getElementById(
+        "serviceName"
+    );
 
 const serviceDescription =
-    document.getElementById("serviceDescription");
+    document.getElementById(
+        "serviceDescription"
+    );
 
 const serviceIcon =
-    document.getElementById("serviceIcon");
+    document.getElementById(
+        "serviceIcon"
+    );
 
 const serviceMessage =
-    document.getElementById("serviceMessage");
+    document.getElementById(
+        "serviceMessage"
+    );
 
 const serviceSubmitBtn =
-    document.getElementById("serviceSubmitBtn");
+    document.getElementById(
+        "serviceSubmitBtn"
+    );
 
 const cancelServiceEdit =
-    document.getElementById("cancelServiceEdit");
+    document.getElementById(
+        "cancelServiceEdit"
+    );
 
 const adminServicesGrid =
-    document.getElementById("adminServicesGrid");
+    document.getElementById(
+        "adminServicesGrid"
+    );
 
 
 // =====================================
@@ -417,9 +484,13 @@ async function loadServices() {
         await supabase
             .from("services")
             .select("*")
-            .order("created_at", {
-                ascending: true
-            });
+            .order(
+                "created_at",
+                {
+                    ascending:
+                        true
+                }
+            );
 
     if (error) {
 
@@ -431,45 +502,59 @@ async function loadServices() {
         return;
     }
 
-    adminServicesGrid.innerHTML = "";
+    adminServicesGrid.innerHTML =
+        "";
 
-    (data || []).forEach((service) => {
+    (data || []).forEach(
+        (service) => {
 
-        const card =
-            document.createElement("div");
+            const card =
+                document.createElement(
+                    "div"
+                );
 
-        card.className =
-            "admin-service-card";
+            card.className =
+                "admin-service-card";
 
-        card.innerHTML = `
+            card.innerHTML = `
 
-            <i class="${service.icon}"></i>
+                <i class="${service.icon}"></i>
 
-            <h3>${service.name}</h3>
+                <h3>
+                    ${service.name}
+                </h3>
 
-            <p>${service.description}</p>
+                <p>
+                    ${service.description}
+                </p>
 
-            <div class="admin-service-actions">
+                <div class="admin-service-actions">
 
-                <button
-                    class="edit-service-btn"
-                    data-id="${service.id}">
-                    Edit
-                </button>
+                    <button
+                        class="edit-service-btn"
+                        data-id="${service.id}">
+                        Edit
+                    </button>
 
-                <button
-                    class="delete-service-btn"
-                    data-id="${service.id}">
-                    Delete
-                </button>
+                    <button
+                        class="delete-service-btn"
+                        data-id="${service.id}">
+                        Delete
+                    </button>
 
-            </div>
-        `;
+                </div>
+            `;
 
-        adminServicesGrid.appendChild(card);
-    });
+            adminServicesGrid
+                .appendChild(
+                    card
+                );
+        }
+    );
 
-    addServiceButtonEvents(data || []);
+    addServiceButtonEvents(
+        data || []
+    );
 }
 
 
@@ -491,10 +576,14 @@ if (serviceForm) {
             const serviceData = {
 
                 name:
-                    serviceName.value.trim(),
+                    serviceName
+                        .value
+                        .trim(),
 
                 description:
-                    serviceDescription.value.trim(),
+                    serviceDescription
+                        .value
+                        .trim(),
 
                 icon:
                     serviceIcon.value
@@ -507,10 +596,16 @@ if (serviceForm) {
                 const result =
                     await supabase
                         .from("services")
-                        .update(serviceData)
-                        .eq("id", id);
+                        .update(
+                            serviceData
+                        )
+                        .eq(
+                            "id",
+                            id
+                        );
 
-                error = result.error;
+                error =
+                    result.error;
 
             } else {
 
@@ -521,7 +616,8 @@ if (serviceForm) {
                             serviceData
                         ]);
 
-                error = result.error;
+                error =
+                    result.error;
             }
 
             if (error) {
@@ -531,13 +627,15 @@ if (serviceForm) {
                     error
                 );
 
-                serviceMessage.textContent =
+                serviceMessage
+                    .textContent =
                     "Could not save service.";
 
                 return;
             }
 
-            serviceMessage.textContent =
+            serviceMessage
+                .textContent =
                 id
                     ? "Service updated successfully!"
                     : "Service added successfully!";
@@ -554,7 +652,9 @@ if (serviceForm) {
 // SERVICE EDIT / DELETE
 // =====================================
 
-function addServiceButtonEvents(services) {
+function addServiceButtonEvents(
+    services
+) {
 
     document.querySelectorAll(
         ".edit-service-btn"
@@ -565,12 +665,16 @@ function addServiceButtonEvents(services) {
             function () {
 
                 const id =
-                    button.getAttribute("data-id");
+                    button.getAttribute(
+                        "data-id"
+                    );
 
                 const service =
                     services.find(
                         item =>
-                            String(item.id) === id
+                            String(
+                                item.id
+                            ) === id
                     );
 
                 if (!service) return;
@@ -581,21 +685,26 @@ function addServiceButtonEvents(services) {
                 serviceName.value =
                     service.name;
 
-                serviceDescription.value =
+                serviceDescription
+                    .value =
                     service.description;
 
                 serviceIcon.value =
                     service.icon;
 
-                serviceSubmitBtn.textContent =
+                serviceSubmitBtn
+                    .textContent =
                     "Update Service";
 
-                cancelServiceEdit.style.display =
+                cancelServiceEdit
+                    .style.display =
                     "inline-block";
 
-                serviceForm.scrollIntoView({
-                    behavior: "smooth"
-                });
+                serviceForm
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
             }
         );
     });
@@ -610,7 +719,9 @@ function addServiceButtonEvents(services) {
             async function () {
 
                 const id =
-                    button.getAttribute("data-id");
+                    button.getAttribute(
+                        "data-id"
+                    );
 
                 if (!confirm(
                     "Are you sure you want to delete this service?"
@@ -622,7 +733,10 @@ function addServiceButtonEvents(services) {
                     await supabase
                         .from("services")
                         .delete()
-                        .eq("id", id);
+                        .eq(
+                            "id",
+                            id
+                        );
 
                 if (error) {
 
@@ -656,12 +770,14 @@ function resetServiceForm() {
 
     serviceForm.reset();
 
-    serviceId.value = "";
+    serviceId.value =
+        "";
 
     serviceSubmitBtn.innerHTML =
         '<i class="fas fa-plus"></i> Add Service';
 
-    cancelServiceEdit.style.display =
+    cancelServiceEdit
+        .style.display =
         "none";
 }
 
@@ -671,37 +787,59 @@ function resetServiceForm() {
 // =====================================
 
 const pricingForm =
-    document.getElementById("pricingForm");
+    document.getElementById(
+        "pricingForm"
+    );
 
 const pricingId =
-    document.getElementById("pricingId");
+    document.getElementById(
+        "pricingId"
+    );
 
 const pricingName =
-    document.getElementById("pricingName");
+    document.getElementById(
+        "pricingName"
+    );
 
 const pricingPrice =
-    document.getElementById("pricingPrice");
+    document.getElementById(
+        "pricingPrice"
+    );
 
 const pricingDescription =
-    document.getElementById("pricingDescription");
+    document.getElementById(
+        "pricingDescription"
+    );
 
 const pricingFeatures =
-    document.getElementById("pricingFeatures");
+    document.getElementById(
+        "pricingFeatures"
+    );
 
 const pricingPopular =
-    document.getElementById("pricingPopular");
+    document.getElementById(
+        "pricingPopular"
+    );
 
 const pricingMessage =
-    document.getElementById("pricingMessage");
+    document.getElementById(
+        "pricingMessage"
+    );
 
 const pricingSubmitBtn =
-    document.getElementById("pricingSubmitBtn");
+    document.getElementById(
+        "pricingSubmitBtn"
+    );
 
 const cancelPricingEdit =
-    document.getElementById("cancelPricingEdit");
+    document.getElementById(
+        "cancelPricingEdit"
+    );
 
 const adminPricingGrid =
-    document.getElementById("adminPricingGrid");
+    document.getElementById(
+        "adminPricingGrid"
+    );
 
 
 // =====================================
@@ -716,9 +854,13 @@ async function loadPricing() {
         await supabase
             .from("pricing")
             .select("*")
-            .order("created_at", {
-                ascending: true
-            });
+            .order(
+                "created_at",
+                {
+                    ascending:
+                        true
+                }
+            );
 
     if (error) {
 
@@ -730,19 +872,23 @@ async function loadPricing() {
         return;
     }
 
-    adminPricingGrid.innerHTML = "";
+    adminPricingGrid.innerHTML =
+        "";
 
     (data || []).forEach((item) => {
 
         const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         card.className =
             "admin-pricing-card";
 
         const featureList =
             item.features
-                ? item.features.split("|")
+                ? item.features
+                    .split("|")
                 : [];
 
         card.innerHTML = `
@@ -753,11 +899,17 @@ async function loadPricing() {
                     : ""
             }
 
-            <h3>${item.name}</h3>
+            <h3>
+                ${item.name}
+            </h3>
 
-            <h4>${item.price}</h4>
+            <h4>
+                ${item.price}
+            </h4>
 
-            <p>${item.description}</p>
+            <p>
+                ${item.description}
+            </p>
 
             <ul>
 
@@ -791,10 +943,15 @@ async function loadPricing() {
             </div>
         `;
 
-        adminPricingGrid.appendChild(card);
+        adminPricingGrid
+            .appendChild(
+                card
+            );
     });
 
-    addPricingButtonEvents(data || []);
+    addPricingButtonEvents(
+        data || []
+    );
 }
 
 
@@ -816,19 +973,28 @@ if (pricingForm) {
             const pricingData = {
 
                 name:
-                    pricingName.value.trim(),
+                    pricingName
+                        .value
+                        .trim(),
 
                 price:
-                    pricingPrice.value.trim(),
+                    pricingPrice
+                        .value
+                        .trim(),
 
                 description:
-                    pricingDescription.value.trim(),
+                    pricingDescription
+                        .value
+                        .trim(),
 
                 features:
-                    pricingFeatures.value.trim(),
+                    pricingFeatures
+                        .value
+                        .trim(),
 
                 is_popular:
-                    pricingPopular.checked
+                    pricingPopular
+                        .checked
             };
 
             let error;
@@ -838,10 +1004,16 @@ if (pricingForm) {
                 const result =
                     await supabase
                         .from("pricing")
-                        .update(pricingData)
-                        .eq("id", id);
+                        .update(
+                            pricingData
+                        )
+                        .eq(
+                            "id",
+                            id
+                        );
 
-                error = result.error;
+                error =
+                    result.error;
 
             } else {
 
@@ -852,7 +1024,8 @@ if (pricingForm) {
                             pricingData
                         ]);
 
-                error = result.error;
+                error =
+                    result.error;
             }
 
             if (error) {
@@ -862,13 +1035,15 @@ if (pricingForm) {
                     error
                 );
 
-                pricingMessage.textContent =
+                pricingMessage
+                    .textContent =
                     "Could not save package.";
 
                 return;
             }
 
-            pricingMessage.textContent =
+            pricingMessage
+                .textContent =
                 id
                     ? "Package updated successfully!"
                     : "Package added successfully!";
@@ -885,7 +1060,9 @@ if (pricingForm) {
 // PRICING EDIT / DELETE
 // =====================================
 
-function addPricingButtonEvents(packages) {
+function addPricingButtonEvents(
+    packages
+) {
 
     document.querySelectorAll(
         ".edit-pricing-btn"
@@ -896,12 +1073,16 @@ function addPricingButtonEvents(packages) {
             function () {
 
                 const id =
-                    button.getAttribute("data-id");
+                    button.getAttribute(
+                        "data-id"
+                    );
 
                 const item =
                     packages.find(
                         packageItem =>
-                            String(packageItem.id) === id
+                            String(
+                                packageItem.id
+                            ) === id
                     );
 
                 if (!item) return;
@@ -915,24 +1096,34 @@ function addPricingButtonEvents(packages) {
                 pricingPrice.value =
                     item.price;
 
-                pricingDescription.value =
+                pricingDescription
+                    .value =
                     item.description;
 
-                pricingFeatures.value =
-                    item.features || "";
+                pricingFeatures
+                    .value =
+                    item.features ||
+                    "";
 
-                pricingPopular.checked =
-                    Boolean(item.is_popular);
+                pricingPopular
+                    .checked =
+                    Boolean(
+                        item.is_popular
+                    );
 
-                pricingSubmitBtn.textContent =
+                pricingSubmitBtn
+                    .textContent =
                     "Update Package";
 
-                cancelPricingEdit.style.display =
+                cancelPricingEdit
+                    .style.display =
                     "inline-block";
 
-                pricingForm.scrollIntoView({
-                    behavior: "smooth"
-                });
+                pricingForm
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
             }
         );
     });
@@ -947,7 +1138,9 @@ function addPricingButtonEvents(packages) {
             async function () {
 
                 const id =
-                    button.getAttribute("data-id");
+                    button.getAttribute(
+                        "data-id"
+                    );
 
                 if (!confirm(
                     "Are you sure you want to delete this package?"
@@ -959,7 +1152,10 @@ function addPricingButtonEvents(packages) {
                     await supabase
                         .from("pricing")
                         .delete()
-                        .eq("id", id);
+                        .eq(
+                            "id",
+                            id
+                        );
 
                 if (error) {
 
@@ -993,12 +1189,14 @@ function resetPricingForm() {
 
     pricingForm.reset();
 
-    pricingId.value = "";
+    pricingId.value =
+        "";
 
     pricingSubmitBtn.innerHTML =
         '<i class="fas fa-plus"></i> Add Package';
 
-    cancelPricingEdit.style.display =
+    cancelPricingEdit
+        .style.display =
         "none";
 }
 
@@ -1008,39 +1206,57 @@ function resetPricingForm() {
 // =====================================
 
 const settingsForm =
-    document.getElementById("settingsForm");
+    document.getElementById(
+        "settingsForm"
+    );
 
 const settingsPhone =
-    document.getElementById("settingsPhone");
+    document.getElementById(
+        "settingsPhone"
+    );
 
 const settingsEmail =
-    document.getElementById("settingsEmail");
+    document.getElementById(
+        "settingsEmail"
+    );
 
 const settingsAddress =
-    document.getElementById("settingsAddress");
+    document.getElementById(
+        "settingsAddress"
+    );
 
 const settingsOpeningHours =
-    document.getElementById("settingsOpeningHours");
+    document.getElementById(
+        "settingsOpeningHours"
+    );
 
 const settingsFacebook =
-    document.getElementById("settingsFacebook");
+    document.getElementById(
+        "settingsFacebook"
+    );
 
 const settingsInstagram =
-    document.getElementById("settingsInstagram");
+    document.getElementById(
+        "settingsInstagram"
+    );
 
-
-// TIKTOK
 const settingsTiktok =
-    document.getElementById("settingsTiktok");
-
+    document.getElementById(
+        "settingsTiktok"
+    );
 
 const settingsWhatsapp =
-    document.getElementById("settingsWhatsapp");
+    document.getElementById(
+        "settingsWhatsapp"
+    );
 
 const settingsMessage =
-    document.getElementById("settingsMessage");
+    document.getElementById(
+        "settingsMessage"
+    );
 
-let settingsRowId = null;
+let settingsRowId =
+    null;
 
 
 // =====================================
@@ -1065,7 +1281,8 @@ async function loadSiteSettings() {
             error
         );
 
-        settingsMessage.textContent =
+        settingsMessage
+            .textContent =
             "Unable to load site settings.";
 
         return;
@@ -1073,7 +1290,8 @@ async function loadSiteSettings() {
 
     if (!data) {
 
-        settingsMessage.textContent =
+        settingsMessage
+            .textContent =
             "No site settings row found.";
 
         return;
@@ -1100,11 +1318,8 @@ async function loadSiteSettings() {
     settingsInstagram.value =
         data.instagram_url || "";
 
-
-    // TIKTOK
     settingsTiktok.value =
         data.tiktok_url || "";
-
 
     settingsWhatsapp.value =
         data.whatsapp_number || "";
@@ -1125,49 +1340,68 @@ if (settingsForm) {
 
             if (!settingsRowId) {
 
-                settingsMessage.textContent =
+                settingsMessage
+                    .textContent =
                     "No settings record found.";
 
                 return;
             }
 
-            settingsMessage.textContent =
+            settingsMessage
+                .textContent =
                 "Saving settings...";
 
             const settingsData = {
 
                 phone:
-                    settingsPhone.value.trim(),
+                    settingsPhone
+                        .value
+                        .trim(),
 
                 email:
-                    settingsEmail.value.trim(),
+                    settingsEmail
+                        .value
+                        .trim(),
 
                 address:
-                    settingsAddress.value.trim(),
+                    settingsAddress
+                        .value
+                        .trim(),
 
                 opening_hours:
-                    settingsOpeningHours.value.trim(),
+                    settingsOpeningHours
+                        .value
+                        .trim(),
 
                 facebook_url:
-                    settingsFacebook.value.trim(),
+                    settingsFacebook
+                        .value
+                        .trim(),
 
                 instagram_url:
-                    settingsInstagram.value.trim(),
+                    settingsInstagram
+                        .value
+                        .trim(),
 
-
-                // TIKTOK
                 tiktok_url:
-                    settingsTiktok.value.trim(),
-
+                    settingsTiktok
+                        .value
+                        .trim(),
 
                 whatsapp_number:
-                    settingsWhatsapp.value.trim()
+                    settingsWhatsapp
+                        .value
+                        .trim()
             };
 
             const { error } =
                 await supabase
-                    .from("site_settings")
-                    .update(settingsData)
+                    .from(
+                        "site_settings"
+                    )
+                    .update(
+                        settingsData
+                    )
                     .eq(
                         "id",
                         settingsRowId
@@ -1180,13 +1414,15 @@ if (settingsForm) {
                     error
                 );
 
-                settingsMessage.textContent =
+                settingsMessage
+                    .textContent =
                     "Could not save settings.";
 
                 return;
             }
 
-            settingsMessage.textContent =
+            settingsMessage
+                .textContent =
                 "Settings updated successfully!";
         }
     );
@@ -1267,6 +1503,28 @@ const teamMemberRole =
         "teamMemberRole"
     );
 
+
+// NEW - PHONE
+const teamMemberPhone =
+    document.getElementById(
+        "teamMemberPhone"
+    );
+
+
+// NEW - EMAIL
+const teamMemberEmail =
+    document.getElementById(
+        "teamMemberEmail"
+    );
+
+
+// NEW - WHATSAPP
+const teamMemberWhatsapp =
+    document.getElementById(
+        "teamMemberWhatsapp"
+    );
+
+
 const teamMemberDescription =
     document.getElementById(
         "teamMemberDescription"
@@ -1302,9 +1560,11 @@ const adminTeamGrid =
         "adminTeamGrid"
     );
 
-let aboutSettingsRowId = null;
+let aboutSettingsRowId =
+    null;
 
-let currentStudioImageUrl = "";
+let currentStudioImageUrl =
+    "";
 
 
 // =====================================
@@ -1319,12 +1579,19 @@ function validateAboutImage(file) {
         "image/webp"
     ];
 
-    if (!allowedTypes.includes(file.type)) {
+    if (
+        !allowedTypes.includes(
+            file.type
+        )
+    ) {
 
         return "Only JPG, PNG and WEBP images are allowed.";
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    if (
+        file.size >
+        5 * 1024 * 1024
+    ) {
 
         return "Image must be smaller than 5 MB.";
     }
@@ -1381,8 +1648,11 @@ async function uploadAboutImage(
             fileName,
             file,
             {
-                cacheControl: "3600",
-                upsert: false
+                cacheControl:
+                    "3600",
+
+                upsert:
+                    false
             }
         );
 
@@ -1395,9 +1665,12 @@ async function uploadAboutImage(
         data: publicUrlData
     } = supabase.storage
         .from("about-images")
-        .getPublicUrl(fileName);
+        .getPublicUrl(
+            fileName
+        );
 
-    return publicUrlData.publicUrl;
+    return publicUrlData
+        .publicUrl;
 }
 
 
@@ -1417,7 +1690,9 @@ function getAboutStorageFileName(
         );
 
     return parts.length > 1
-        ? decodeURIComponent(parts[1])
+        ? decodeURIComponent(
+            parts[1]
+        )
         : "";
 }
 
@@ -1462,17 +1737,20 @@ function renderStudioPreview(
     imageUrl
 ) {
 
-    if (!aboutStudioPreview) return;
+    if (!aboutStudioPreview)
+        return;
 
     if (!imageUrl) {
 
-        aboutStudioPreview.innerHTML =
+        aboutStudioPreview
+            .innerHTML =
             "<p>No studio image available.</p>";
 
         return;
     }
 
-    aboutStudioPreview.innerHTML = `
+    aboutStudioPreview
+        .innerHTML = `
         <img
             src="${imageUrl}"
             alt="Current studio photo"
@@ -1494,11 +1772,14 @@ function renderStudioPreview(
 
 async function loadAboutSettings() {
 
-    if (!aboutSettingsForm) return;
+    if (!aboutSettingsForm)
+        return;
 
     const { data, error } =
         await supabase
-            .from("about_settings")
+            .from(
+                "about_settings"
+            )
             .select("*")
             .limit(1)
             .maybeSingle();
@@ -1510,7 +1791,8 @@ async function loadAboutSettings() {
             error
         );
 
-        aboutSettingsMessage.textContent =
+        aboutSettingsMessage
+            .textContent =
             "Unable to load about settings.";
 
         return;
@@ -1518,7 +1800,8 @@ async function loadAboutSettings() {
 
     if (!data) {
 
-        aboutSettingsMessage.textContent =
+        aboutSettingsMessage
+            .textContent =
             "No about settings row found.";
 
         return;
@@ -1528,16 +1811,20 @@ async function loadAboutSettings() {
         data.id;
 
     currentStudioImageUrl =
-        data.studio_image_url || "";
+        data.studio_image_url ||
+        "";
 
     aboutStoryTitle.value =
-        data.story_title || "";
+        data.story_title ||
+        "";
 
     aboutStoryText1.value =
-        data.story_text_1 || "";
+        data.story_text_1 ||
+        "";
 
     aboutStoryText2.value =
-        data.story_text_2 || "";
+        data.story_text_2 ||
+        "";
 
     renderStudioPreview(
         currentStudioImageUrl
@@ -1557,23 +1844,29 @@ if (aboutSettingsForm) {
 
             event.preventDefault();
 
-            if (!aboutSettingsRowId) {
+            if (
+                !aboutSettingsRowId
+            ) {
 
-                aboutSettingsMessage.textContent =
+                aboutSettingsMessage
+                    .textContent =
                     "No about settings record found.";
 
                 return;
             }
 
-            aboutSettingsSaveBtn.disabled =
+            aboutSettingsSaveBtn
+                .disabled =
                 true;
 
-            aboutSettingsSaveBtn.innerHTML = `
+            aboutSettingsSaveBtn
+                .innerHTML = `
                 <i class="fas fa-spinner fa-spin"></i>
                 Saving...
             `;
 
-            aboutSettingsMessage.textContent =
+            aboutSettingsMessage
+                .textContent =
                 "Saving about settings...";
 
             let newStudioImageUrl =
@@ -1585,7 +1878,8 @@ if (aboutSettingsForm) {
             try {
 
                 const newImage =
-                    aboutStudioImage.files[0];
+                    aboutStudioImage
+                        .files[0];
 
                 if (newImage) {
 
@@ -1594,9 +1888,12 @@ if (aboutSettingsForm) {
                             newImage
                         );
 
-                    if (validationError) {
+                    if (
+                        validationError
+                    ) {
 
-                        aboutSettingsMessage.textContent =
+                        aboutSettingsMessage
+                            .textContent =
                             validationError;
 
                         return;
@@ -1614,20 +1911,29 @@ if (aboutSettingsForm) {
 
                 const { error } =
                     await supabase
-                        .from("about_settings")
+                        .from(
+                            "about_settings"
+                        )
                         .update({
 
                             studio_image_url:
                                 newStudioImageUrl,
 
                             story_title:
-                                aboutStoryTitle.value.trim(),
+                                aboutStoryTitle
+                                    .value
+                                    .trim(),
 
                             story_text_1:
-                                aboutStoryText1.value.trim(),
+                                aboutStoryText1
+                                    .value
+                                    .trim(),
 
                             story_text_2:
-                                aboutStoryText2.value.trim()
+                                aboutStoryText2
+                                    .value
+                                    .trim()
+
                         })
                         .eq(
                             "id",
@@ -1641,14 +1947,17 @@ if (aboutSettingsForm) {
                         error
                     );
 
-                    if (uploadedNewImage) {
+                    if (
+                        uploadedNewImage
+                    ) {
 
                         await removeAboutImageByUrl(
                             newStudioImageUrl
                         );
                     }
 
-                    aboutSettingsMessage.textContent =
+                    aboutSettingsMessage
+                        .textContent =
                         "Could not save about settings.";
 
                     return;
@@ -1669,14 +1978,16 @@ if (aboutSettingsForm) {
                 currentStudioImageUrl =
                     newStudioImageUrl;
 
-                aboutStudioImage.value =
+                aboutStudioImage
+                    .value =
                     "";
 
                 renderStudioPreview(
                     currentStudioImageUrl
                 );
 
-                aboutSettingsMessage.textContent =
+                aboutSettingsMessage
+                    .textContent =
                     "About settings updated successfully!";
 
             } catch (error) {
@@ -1686,15 +1997,18 @@ if (aboutSettingsForm) {
                     error
                 );
 
-                aboutSettingsMessage.textContent =
+                aboutSettingsMessage
+                    .textContent =
                     "Something went wrong while saving.";
 
             } finally {
 
-                aboutSettingsSaveBtn.disabled =
+                aboutSettingsSaveBtn
+                    .disabled =
                     false;
 
-                aboutSettingsSaveBtn.innerHTML = `
+                aboutSettingsSaveBtn
+                    .innerHTML = `
                     <i class="fas fa-floppy-disk"></i>
                     Save About Settings
                 `;
@@ -1710,16 +2024,20 @@ if (aboutSettingsForm) {
 
 async function loadTeamMembers() {
 
-    if (!adminTeamGrid) return;
+    if (!adminTeamGrid)
+        return;
 
     const { data, error } =
         await supabase
-            .from("team_members")
+            .from(
+                "team_members"
+            )
             .select("*")
             .order(
                 "display_order",
                 {
-                    ascending: true
+                    ascending:
+                        true
                 }
             );
 
@@ -1730,83 +2048,136 @@ async function loadTeamMembers() {
             error
         );
 
-        adminTeamGrid.innerHTML =
+        adminTeamGrid
+            .innerHTML =
             "<p>Unable to load team members.</p>";
 
         return;
     }
 
-    adminTeamGrid.innerHTML = "";
+    adminTeamGrid.innerHTML =
+        "";
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
-        adminTeamGrid.innerHTML =
+        adminTeamGrid
+            .innerHTML =
             "<p>No team members added yet.</p>";
 
         return;
     }
 
-    data.forEach((member) => {
+    data.forEach(
+        (member) => {
 
-        const card =
-            document.createElement("div");
+            const card =
+                document.createElement(
+                    "div"
+                );
 
-        card.className =
-            "admin-team-card";
+            card.className =
+                "admin-team-card";
 
-        card.innerHTML = `
-            <img
-                src="${member.image_url || ""}"
-                alt="${member.name}"
-                style="
-                    width:100%;
-                    height:220px;
-                    object-fit:cover;
-                    border-radius:14px;
-                    margin-bottom:16px;
-                    background:#eee;
-                ">
+            card.innerHTML = `
 
-            <h3>
-                ${member.name}
-            </h3>
+                <img
+                    src="${member.image_url || ""}"
+                    alt="${member.name}"
+                    style="
+                        width:100%;
+                        height:220px;
+                        object-fit:cover;
+                        border-radius:14px;
+                        margin-bottom:16px;
+                        background:#eee;
+                    ">
 
-            <p>
-                <strong>
-                    ${member.role}
-                </strong>
-            </p>
 
-            <p>
-                ${member.description}
-            </p>
+                <h3>
+                    ${member.name}
+                </h3>
 
-            <p>
-                Display Order:
-                ${member.display_order}
-            </p>
 
-            <div class="admin-service-actions">
+                <p>
+                    <strong>
+                        ${member.role}
+                    </strong>
+                </p>
 
-                <button
-                    class="edit-team-btn"
-                    data-id="${member.id}">
-                    Edit
-                </button>
 
-                <button
-                    class="delete-team-btn"
-                    data-id="${member.id}">
-                    Delete
-                </button>
+                ${
+                    member.phone
+                        ? `
+                        <p>
+                            <i class="fas fa-phone"></i>
+                            ${member.phone}
+                        </p>
+                        `
+                        : ""
+                }
 
-            </div>
-        `;
 
-        adminTeamGrid.appendChild(
-            card
-        );
-    });
+                ${
+                    member.email
+                        ? `
+                        <p>
+                            <i class="fas fa-envelope"></i>
+                            ${member.email}
+                        </p>
+                        `
+                        : ""
+                }
+
+
+                ${
+                    member.whatsapp_number
+                        ? `
+                        <p>
+                            <i class="fab fa-whatsapp"></i>
+                            ${member.whatsapp_number}
+                        </p>
+                        `
+                        : ""
+                }
+
+
+                <p>
+                    ${member.description}
+                </p>
+
+
+                <p>
+                    Display Order:
+                    ${member.display_order}
+                </p>
+
+
+                <div class="admin-service-actions">
+
+                    <button
+                        class="edit-team-btn"
+                        data-id="${member.id}">
+                        Edit
+                    </button>
+
+                    <button
+                        class="delete-team-btn"
+                        data-id="${member.id}">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+
+            adminTeamGrid
+                .appendChild(
+                    card
+                );
+        }
+    );
 
     addTeamMemberButtonEvents(
         data
@@ -1830,14 +2201,20 @@ if (teamMemberForm) {
                 teamMemberId.value;
 
             const selectedImage =
-                teamMemberImage.files[0];
+                teamMemberImage
+                    .files[0];
 
             const oldImageUrl =
-                teamMemberOldImageUrl.value;
+                teamMemberOldImageUrl
+                    .value;
 
-            if (!id && !selectedImage) {
+            if (
+                !id &&
+                !selectedImage
+            ) {
 
-                teamMemberMessage.textContent =
+                teamMemberMessage
+                    .textContent =
                     "Please select a team member photo.";
 
                 return;
@@ -1850,28 +2227,35 @@ if (teamMemberForm) {
                         selectedImage
                     );
 
-                if (validationError) {
+                if (
+                    validationError
+                ) {
 
-                    teamMemberMessage.textContent =
+                    teamMemberMessage
+                        .textContent =
                         validationError;
 
                     return;
                 }
             }
 
-            teamMemberSubmitBtn.disabled =
+            teamMemberSubmitBtn
+                .disabled =
                 true;
 
-            teamMemberSubmitBtn.innerHTML = `
+            teamMemberSubmitBtn
+                .innerHTML = `
                 <i class="fas fa-spinner fa-spin"></i>
                 Saving...
             `;
 
-            teamMemberMessage.textContent =
+            teamMemberMessage
+                .textContent =
                 "Saving team member...";
 
             let imageUrl =
-                oldImageUrl || "";
+                oldImageUrl ||
+                "";
 
             let uploadedNewImage =
                 false;
@@ -1890,47 +2274,99 @@ if (teamMemberForm) {
                         true;
                 }
 
+
+                // =====================================
+                // TEAM MEMBER DATA
+                // =====================================
+
                 const memberData = {
 
                     name:
-                        teamMemberName.value.trim(),
+                        teamMemberName
+                            .value
+                            .trim(),
 
                     role:
-                        teamMemberRole.value.trim(),
+                        teamMemberRole
+                            .value
+                            .trim(),
+
+                    phone:
+                        teamMemberPhone
+                            ? teamMemberPhone
+                                .value
+                                .trim()
+                            : "",
+
+                    email:
+                        teamMemberEmail
+                            ? teamMemberEmail
+                                .value
+                                .trim()
+                            : "",
+
+                    whatsapp_number:
+                        teamMemberWhatsapp
+                            ? teamMemberWhatsapp
+                                .value
+                                .trim()
+                            : "",
 
                     description:
-                        teamMemberDescription.value.trim(),
+                        teamMemberDescription
+                            .value
+                            .trim(),
 
                     image_url:
                         imageUrl,
 
                     display_order:
                         Number(
-                            teamMemberOrder.value
+                            teamMemberOrder
+                                .value
                         )
                 };
 
+
                 let error;
+
 
                 if (id) {
 
                     ({
                         error
                     } = await supabase
-                        .from("team_members")
-                        .update(memberData)
-                        .eq("id", id));
+
+                        .from(
+                            "team_members"
+                        )
+
+                        .update(
+                            memberData
+                        )
+
+                        .eq(
+                            "id",
+                            id
+                        )
+                    );
 
                 } else {
 
                     ({
                         error
                     } = await supabase
-                        .from("team_members")
+
+                        .from(
+                            "team_members"
+                        )
+
                         .insert([
                             memberData
-                        ]));
+                        ])
+                    );
                 }
+
 
                 if (error) {
 
@@ -1939,24 +2375,29 @@ if (teamMemberForm) {
                         error
                     );
 
-                    if (uploadedNewImage) {
+                    if (
+                        uploadedNewImage
+                    ) {
 
                         await removeAboutImageByUrl(
                             imageUrl
                         );
                     }
 
-                    teamMemberMessage.textContent =
+                    teamMemberMessage
+                        .textContent =
                         "Could not save team member.";
 
                     return;
                 }
 
+
                 if (
                     id &&
                     uploadedNewImage &&
                     oldImageUrl &&
-                    oldImageUrl !== imageUrl
+                    oldImageUrl !==
+                        imageUrl
                 ) {
 
                     await removeAboutImageByUrl(
@@ -1964,14 +2405,19 @@ if (teamMemberForm) {
                     );
                 }
 
-                teamMemberMessage.textContent =
+
+                teamMemberMessage
+                    .textContent =
                     id
                         ? "Team member updated successfully!"
                         : "Team member added successfully!";
 
+
                 resetTeamMemberForm();
 
+
                 await loadTeamMembers();
+
 
             } catch (error) {
 
@@ -1980,22 +2426,28 @@ if (teamMemberForm) {
                     error
                 );
 
-                teamMemberMessage.textContent =
+                teamMemberMessage
+                    .textContent =
                     "Something went wrong while saving.";
 
             } finally {
 
-                teamMemberSubmitBtn.disabled =
+                teamMemberSubmitBtn
+                    .disabled =
                     false;
 
-                if (teamMemberId.value) {
+                if (
+                    teamMemberId.value
+                ) {
 
-                    teamMemberSubmitBtn.textContent =
+                    teamMemberSubmitBtn
+                        .textContent =
                         "Update Team Member";
 
                 } else {
 
-                    teamMemberSubmitBtn.innerHTML = `
+                    teamMemberSubmitBtn
+                        .innerHTML = `
                         <i class="fas fa-plus"></i>
                         Add Team Member
                     `;
@@ -2030,41 +2482,104 @@ function addTeamMemberButtonEvents(
                 const member =
                     members.find(
                         item =>
-                            String(item.id) === id
+                            String(
+                                item.id
+                            ) === id
                     );
 
-                if (!member) return;
+                if (!member)
+                    return;
+
 
                 teamMemberId.value =
                     member.id;
 
-                teamMemberOldImageUrl.value =
-                    member.image_url || "";
+
+                teamMemberOldImageUrl
+                    .value =
+                    member.image_url ||
+                    "";
+
 
                 teamMemberName.value =
-                    member.name || "";
+                    member.name ||
+                    "";
+
 
                 teamMemberRole.value =
-                    member.role || "";
+                    member.role ||
+                    "";
 
-                teamMemberDescription.value =
-                    member.description || "";
+
+                // PHONE
+
+                if (
+                    teamMemberPhone
+                ) {
+
+                    teamMemberPhone
+                        .value =
+                        member.phone ||
+                        "";
+                }
+
+
+                // EMAIL
+
+                if (
+                    teamMemberEmail
+                ) {
+
+                    teamMemberEmail
+                        .value =
+                        member.email ||
+                        "";
+                }
+
+
+                // WHATSAPP
+
+                if (
+                    teamMemberWhatsapp
+                ) {
+
+                    teamMemberWhatsapp
+                        .value =
+                        member.whatsapp_number ||
+                        "";
+                }
+
+
+                teamMemberDescription
+                    .value =
+                    member.description ||
+                    "";
+
 
                 teamMemberOrder.value =
-                    member.display_order || 1;
+                    member.display_order ||
+                    1;
+
 
                 teamMemberImage.value =
                     "";
 
-                teamMemberSubmitBtn.textContent =
+
+                teamMemberSubmitBtn
+                    .textContent =
                     "Update Team Member";
 
-                cancelTeamMemberEdit.style.display =
+
+                cancelTeamMemberEdit
+                    .style.display =
                     "inline-block";
 
-                teamMemberForm.scrollIntoView({
-                    behavior: "smooth"
-                });
+
+                teamMemberForm
+                    .scrollIntoView({
+                        behavior:
+                            "smooth"
+                    });
             }
         );
     });
@@ -2086,10 +2601,13 @@ function addTeamMemberButtonEvents(
                 const member =
                     members.find(
                         item =>
-                            String(item.id) === id
+                            String(
+                                item.id
+                            ) === id
                     );
 
-                if (!member) return;
+                if (!member)
+                    return;
 
                 if (!confirm(
                     "Are you sure you want to delete this team member?"
@@ -2099,9 +2617,14 @@ function addTeamMemberButtonEvents(
 
                 const { error } =
                     await supabase
-                        .from("team_members")
+                        .from(
+                            "team_members"
+                        )
                         .delete()
-                        .eq("id", id);
+                        .eq(
+                            "id",
+                            id
+                        );
 
                 if (error) {
 
@@ -2113,7 +2636,9 @@ function addTeamMemberButtonEvents(
                     return;
                 }
 
-                if (member.image_url) {
+                if (
+                    member.image_url
+                ) {
 
                     await removeAboutImageByUrl(
                         member.image_url
@@ -2135,10 +2660,11 @@ function addTeamMemberButtonEvents(
 
 if (cancelTeamMemberEdit) {
 
-    cancelTeamMemberEdit.addEventListener(
-        "click",
-        resetTeamMemberForm
-    );
+    cancelTeamMemberEdit
+        .addEventListener(
+            "click",
+            resetTeamMemberForm
+        );
 }
 
 
@@ -2148,25 +2674,29 @@ if (cancelTeamMemberEdit) {
 
 function resetTeamMemberForm() {
 
-    if (!teamMemberForm) return;
+    if (!teamMemberForm)
+        return;
 
     teamMemberForm.reset();
 
     teamMemberId.value =
         "";
 
-    teamMemberOldImageUrl.value =
+    teamMemberOldImageUrl
+        .value =
         "";
 
     teamMemberOrder.value =
         "1";
 
-    teamMemberSubmitBtn.innerHTML = `
+    teamMemberSubmitBtn
+        .innerHTML = `
         <i class="fas fa-plus"></i>
         Add Team Member
     `;
 
-    cancelTeamMemberEdit.style.display =
+    cancelTeamMemberEdit
+        .style.display =
         "none";
 }
 
@@ -2185,53 +2715,67 @@ const adminSections =
         ".admin-section"
     );
 
-adminNavLinks.forEach((link) => {
+adminNavLinks.forEach(
+    (link) => {
 
-    link.addEventListener(
-        "click",
-        function (event) {
+        link.addEventListener(
+            "click",
+            function (event) {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            const sectionId =
-                this.getAttribute(
-                    "data-section"
-                );
+                const sectionId =
+                    this.getAttribute(
+                        "data-section"
+                    );
 
-            adminNavLinks.forEach(
-                nav => {
-                    nav.classList.remove(
+                adminNavLinks
+                    .forEach(
+                        nav => {
+
+                            nav.classList
+                                .remove(
+                                    "active"
+                                );
+                        }
+                    );
+
+                adminSections
+                    .forEach(
+                        section => {
+
+                            section.classList
+                                .remove(
+                                    "active"
+                                );
+                        }
+                    );
+
+                this.classList
+                    .add(
                         "active"
                     );
+
+                const selectedSection =
+                    document
+                        .getElementById(
+                            sectionId
+                        );
+
+                if (
+                    selectedSection
+                ) {
+
+                    selectedSection
+                        .classList
+                        .add(
+                            "active"
+                        );
                 }
-            );
-
-            adminSections.forEach(
-                section => {
-                    section.classList.remove(
-                        "active"
-                    );
-                }
-            );
-
-            this.classList.add(
-                "active"
-            );
-
-            const selectedSection =
-                document.getElementById(
-                    sectionId
-                );
-
-            if (selectedSection) {
-
-                selectedSection.classList.add(
-                    "active"
-                );
             }
-        }
-    );
-});
+        );
+    }
+);
 
 
 // =====================================
@@ -2244,7 +2788,8 @@ if (logoutBtn) {
         "click",
         async function () {
 
-            await supabase.auth.signOut();
+            await supabase.auth
+                .signOut();
 
             window.location.href =
                 "admin-login.html";
@@ -2258,8 +2803,13 @@ if (logoutBtn) {
 // =====================================
 
 loadGallery();
+
 loadServices();
+
 loadPricing();
+
 loadSiteSettings();
+
 loadAboutSettings();
+
 loadTeamMembers();

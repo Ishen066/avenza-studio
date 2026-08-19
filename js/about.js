@@ -162,6 +162,42 @@ async function loadTeamMembers() {
             "team-card";
 
 
+        // =====================================
+        // CONTACT LINKS
+        // =====================================
+
+        const phoneNumber =
+            (member.phone || "")
+                .replace(/[^\d+]/g, "");
+
+
+        const whatsappNumber =
+            (member.whatsapp_number || "")
+                .replace(/\D/g, "");
+
+
+        const phoneLink =
+            phoneNumber
+                ? `tel:${phoneNumber}`
+                : "";
+
+
+        const emailLink =
+            member.email
+                ? `mailto:${member.email}`
+                : "";
+
+
+        const whatsappLink =
+            whatsappNumber
+                ? `https://wa.me/${whatsappNumber}`
+                : "";
+
+
+        // =====================================
+        // TEAM CARD
+        // =====================================
+
         card.innerHTML = `
 
             <img
@@ -180,6 +216,62 @@ async function loadTeamMembers() {
             <p>
                 ${member.description}
             </p>
+
+
+            <div class="team-contact-actions">
+
+                ${
+                    phoneLink
+                        ? `
+                        <a
+                            href="${phoneLink}"
+                            class="team-contact-btn"
+                            aria-label="Call ${member.name}"
+                            title="Call">
+
+                            <i class="fas fa-phone"></i>
+
+                        </a>
+                        `
+                        : ""
+                }
+
+
+                ${
+                    emailLink
+                        ? `
+                        <a
+                            href="${emailLink}"
+                            class="team-contact-btn"
+                            aria-label="Email ${member.name}"
+                            title="Email">
+
+                            <i class="fas fa-envelope"></i>
+
+                        </a>
+                        `
+                        : ""
+                }
+
+
+                ${
+                    whatsappLink
+                        ? `
+                        <a
+                            href="${whatsappLink}"
+                            target="_blank"
+                            class="team-contact-btn whatsapp"
+                            aria-label="WhatsApp ${member.name}"
+                            title="WhatsApp">
+
+                            <i class="fab fa-whatsapp"></i>
+
+                        </a>
+                        `
+                        : ""
+                }
+
+            </div>
 
         `;
 

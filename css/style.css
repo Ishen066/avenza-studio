@@ -5071,3 +5071,68 @@ footer h3{
     }
 
 }
+/* =========================================
+   TEAM MEMBER CONTACT BUTTONS
+========================================= */
+
+.team-contact-actions{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+
+    margin-top:18px;
+}
+
+.team-contact-btn{
+    width:42px;
+    height:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#ffffff;
+    color:#522f0f;
+
+    text-decoration:none;
+
+    font-size:17px;
+
+    border:1px solid rgba(255,255,255,0.35);
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+.team-contact-btn:hover{
+    transform:translateY(-3px);
+
+    background:#522f0f;
+    color:#ffffff;
+}
+
+.team-contact-btn.whatsapp:hover{
+    background:#25D366;
+    color:#ffffff;
+}
+
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .team-contact-actions{
+        gap:10px;
+    }
+
+    .team-contact-btn{
+        width:40px;
+        height:40px;
+        font-size:16px;
+    }
+}
